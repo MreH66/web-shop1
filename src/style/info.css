@@ -1,0 +1,28 @@
+.textInfo {
+    text-decoration: underline;
+    padding: 1%;
+
+    pointer-events: none;
+    user-select: none;
+}
+
+p {
+    font-size: 1rem;
+    padding: 2%;
+}
+
+.infoBox {
+    position: static;
+
+}
+
+.DivStyle {
+    background: white;
+    border-radius: 0% 0% 0% 0% / 0% 0% 0% 0% ;
+    box-shadow: 10px 10px rgba(0,0,0,.15);
+}
+
+
+/*
+
+*/

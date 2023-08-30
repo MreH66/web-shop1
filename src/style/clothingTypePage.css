@@ -1,0 +1,43 @@
+.nameOfItem {
+    text-align: center;
+
+    padding: 1.3%;
+
+    font-size: 220%;
+
+    background: white;
+    border-radius: 0% 0% 0% 0% / 0% 0% 0% 0% ;
+    box-shadow: 8px 8px rgba(0,0,0,.15);
+
+    margin: auto;
+    width: 80%;
+    margin-top: 5%;
+}
+
+
+.mainItemName {
+    text-align: center;
+
+    padding: 1%;
+
+    font-size: 220%;
+
+    
+ background: white;
+ border-radius: 0% 0% 0% 0% / 0% 0% 0% 0% ;
+ box-shadow: 10px 10px rgba(0,0,0,.15);
+
+ width: fit-content;
+ margin: auto;
+
+ margin-top: 1%;
+ margin-bottom: 1%;
+}
+
+.itemsContainer {
+
+}
+
+.boxItem {
+    padding: 2%;
+}
