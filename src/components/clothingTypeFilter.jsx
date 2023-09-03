@@ -11,10 +11,7 @@ import Row from "react-bootstrap/Row";
 import { Link } from "react-router-dom";
 
 function ClothingTyleFilter(props) {
-  // console.log(props.name);
-
   const returnArrFun = ReturnArr(props.items);
-  // console.log(returnArrFun);
 
   return (
     <div>

@@ -25,6 +25,9 @@ import malePic from "./images/article_aligned@2x.jpg";
 import femalePic from "./images/photoFemale.jpeg";
 import React, { useState } from "react";
 
+// fun
+import ReturnArr from "./components/clothingItems/clothingArrays";
+
 function App() {
   const [viewComp1] = useState(<Window1 fun1={selectClothingRout} />);
   const [viewComp2] = useState(<Window2 fun1={selectClothingRout} />); //!!! ovde mogu da korstim isti comp samo sa drugacijim props
@@ -54,23 +57,9 @@ function App() {
 
   let location = useLocation(); // dobijam rutu
 
-  // sa pojedinacni item
-
-  const [itemId, setItemId] = useState();
-  const [typeClothing, setTypeClothing] = useState();
-
-  function getItemsID(idOfItem, TypeOfitem) {
-    setItemId(idOfItem); // id ajtema
-    setTypeClothing(TypeOfitem); // vrsta itema
-    // console.log("/" + TypeOfitem + "/" + idOfItem);
-  }
-
-  React.useEffect(() => {}, [itemId, typeClothing]);
-
-  // za array iteme
-
   const [routeLink, setRouteLink] = useState("/");
   const [ItemName, setItemName] = useState();
+  const [arrName, setArrName] = useState();
 
   function selectClothingRout(nameOfItems) {
     // console.log(nameOfItems);
@@ -82,15 +71,24 @@ function App() {
   React.useEffect(() => {
     //  console.log(location.pathname);
 
-    setRouteLink(location.pathname);
-    const replaceToNormalName = location.pathname.replace(/[^a-z0-9]/gi, "");
-    setItemName(replaceToNormalName);
-  }, [routeLink, ItemName]); // zasto je ovde err?
+    const parts = location.pathname.split("/");
+    const lastUrlPart = parts.at(-1);
 
-  // log
-  React.useEffect(() => {
-    console.log(location.pathname);
-  }, [location]); // zasto je ovde err?
+    const parts1 = location.pathname.split("/");
+    const firstPartUrl = parts1.at(1);
+
+    console.log(firstPartUrl);
+    if (firstPartUrl === "lista") {
+      setRouteLink(lastUrlPart);
+      setItemName(lastUrlPart);
+    } else if (firstPartUrl !== "lista") {
+      setRouteLink(firstPartUrl);
+      setItemName(lastUrlPart);
+
+      const arrName = ReturnArr(firstPartUrl);
+      setArrName(arrName);
+    }
+  }, [location]);
 
   return (
     <div className="backG-Color">
@@ -130,26 +128,33 @@ function App() {
         ></Route>
 
         <Route
-          path={routeLink}
+          exact
+          path={"/lista/" + routeLink}
           element={
-            <ClothingTyleFilter
-              functionGetRoute={getItemsID}
-              items={ItemName}
-            />
+            <div>
+              <ClothingTyleFilter
+                functionGetRoute={selectClothingRout}
+                items={ItemName}
+              />
+            </div>
           }
         ></Route>
 
         <Route
-          path={"/" + typeClothing + "/" + itemId}
-          element={<Item itemId={itemId} clothingType={typeClothing} />}
+          path={"/" + routeLink + "/" + ItemName}
+          element={
+            <Item
+              itemId={ItemName}
+              clothingType={routeLink}
+              arr={arrName}
+            ></Item>
+          }
         ></Route>
       </Routes>
-
-      <Footer1 />
     </div>
   );
 }
 
 export default App;
 
-//  <Route path={() => {}} element={}></Route>
+//   <Footer1 />

@@ -13,14 +13,19 @@
     box-shadow: 0px 15px 10px -15px #111;
 }
 
-.mainInfoDiv {
-    margin: auto;
-    width: 60%;
-}
-
 .clothingInfo {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+}
 
+a {
+    text-decoration: none;
+}
+
+.PInfoText {
+    color: black;
     text-align: center;
+
+    font-size: 1.4em;
 }

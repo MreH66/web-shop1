@@ -2,18 +2,14 @@
 import "../style/clothingItemBox.css";
 
 function ClothingItem(props) {
-
-  
   return (
     <div>
       <div className="mainImgDiv">
         <img className="mainImg" src={props.MainPicture} alt="MainPic"></img>
       </div>
-      <div className="mainInfoDiv">
-        <div className="clothingInfo">
-          <p>{props.name}</p>
-          <p>{props.price} Din</p>
-        </div>
+      <div className="clothingInfo">
+        <p className="PInfoText">{props.name}</p>
+        <p className="PInfoText">{props.price} Din</p>
       </div>
     </div>
   );

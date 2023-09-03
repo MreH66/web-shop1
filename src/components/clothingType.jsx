@@ -10,7 +10,7 @@ function ClothingType(props) {
       }}
       className="comp"
     >
-      <Link to={props.name}>
+      <Link to={"/lista/" + props.name}>
         <div className="shadowB">
           <p className="centarP">{props.name}</p>
         </div>
