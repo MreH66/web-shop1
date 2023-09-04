@@ -12,7 +12,7 @@ import Col from "react-bootstrap/Col";
 // components
 import Header from "./components/header";
 import GenderS from "./components/genderS";
-import Footer1 from "./components/footer";
+// import Footer1 from "./components/footer";
 import InfoText from "./components/info";
 import ClothingTyleFilter from "./components/clothingTypeFilter";
 import Item from "./components/itemComp";
@@ -107,7 +107,7 @@ function App() {
                         handleClick(1);
                       }}
                     >
-                      <GenderS gender="Accessories & more" picture={malePic} />
+                      <GenderS gender="Accessories" picture={malePic} />
                     </div>
                   </Col>
                   <Col>
