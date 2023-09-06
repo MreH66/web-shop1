@@ -48,6 +48,3 @@ function ClothingTyleFilter(props) {
 }
 
 export default ClothingTyleFilter;
-// link koji ce da me vodi ddo item koji zelim putem id-a
-// nakon toga funcija koja mi vraca taj item
-// comp koji renderuje taj jedan comp sa svim informacijama

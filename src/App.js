@@ -25,12 +25,12 @@ import malePic from "./images/article_aligned@2x.jpg";
 import femalePic from "./images/photoFemale.jpeg";
 import React, { useState } from "react";
 
-// fun
+// function
 import ReturnArr from "./components/clothingItems/clothingArrays";
 
 function App() {
   const [viewComp1] = useState(<Window1 fun1={selectClothingRout} />);
-  const [viewComp2] = useState(<Window2 fun1={selectClothingRout} />); //!!! ovde mogu da korstim isti comp samo sa drugacijim props
+  const [viewComp2] = useState(<Window2 fun1={selectClothingRout} />);
   const [viewComp3, setViewComp3] = useState(<InfoText />);
 
   function handleClick(num) {
@@ -156,5 +156,3 @@ function App() {
 }
 
 export default App;
-
-//   <Footer1 />
