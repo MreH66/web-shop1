@@ -157,14 +157,20 @@ const suknja = [
 
 function ReturnArr(nameOfArr) {
   // bolje switch da se iskoristi
-  if (nameOfArr === "haljina") {
-    return haljina;
-  } else if (nameOfArr === "pantalone") {
-    return pantalone;
-  } else if (nameOfArr === "suknja") {
-    return suknja;
-  } else {
-    return console.log("arr of items not found");
+
+  switch (nameOfArr) {
+    case "haljina":
+      return haljina;
+
+    case "pantalone":
+      return pantalone;
+
+    case "suknja":
+      return suknja;
+
+    default:
+      console.log("arr of items not found");
+      break;
   }
 }
 

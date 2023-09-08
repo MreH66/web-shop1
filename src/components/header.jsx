@@ -26,7 +26,6 @@ function Header() {
   return (
     <div>
       <header>
-        <img className="img1" src="" alt="Logo" />
         <img
           className="displayL"
           src={icon1}
@@ -34,21 +33,19 @@ function Header() {
           onClick={displayHandler}
         />
 
-        <div className="middle">
-          <Link to="/">
-            <h1 className="inlineD">Name</h1>
-          </Link>
-        </div>
-
         {options ? (
           <>
-            <button className="optionsP" onClick={logGoogleUser}>
+            <button onClick={logGoogleUser} className="optionsP">
               <p className="LoginText">Login</p>
             </button>
           </>
         ) : (
           <></>
         )}
+
+        <Link to="/">
+          <h1 className="inlineD">Name</h1>
+        </Link>
       </header>
     </div>
   );
