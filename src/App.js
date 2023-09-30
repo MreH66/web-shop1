@@ -3,7 +3,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 // react router
 import { Route, Routes, useLocation } from "react-router-dom";
-
 // Bootstrap
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -12,6 +11,8 @@ import Col from "react-bootstrap/Col";
 // components
 import Header from "./components/header";
 import GenderS from "./components/genderS";
+import CreateItem from "./components/CreateItem.com/createItemMain";
+
 // import Footer1 from "./components/footer";
 import InfoText from "./components/info";
 import ClothingTyleFilter from "./components/clothingTypeFilter";
@@ -23,7 +24,7 @@ import Window2 from "./components/window2";
 //pictures
 import malePic from "./images/article_aligned@2x.jpg";
 import femalePic from "./images/photoFemale.jpeg";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // function
 import ReturnArr from "./components/clothingItems/clothingArrays";
@@ -68,7 +69,7 @@ function App() {
     setItemName(nameOfItems);
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     //  console.log(location.pathname);
 
     const parts = location.pathname.split("/");
@@ -89,6 +90,11 @@ function App() {
       setArrName(arrName);
     }
   }, [location]);
+
+  /*  useEffect(() => {
+    const arrName = ReturnArr(routeLink);
+    setArrName(arrName);
+  }, []); */
 
   return (
     <div className="backG-Color">
@@ -150,6 +156,8 @@ function App() {
             ></Item>
           }
         ></Route>
+
+        <Route path="/CreateItems" element={<CreateItem />}></Route>
       </Routes>
     </div>
   );

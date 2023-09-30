@@ -1,0 +1,15 @@
+.itemsSize {
+    display: grid;
+grid-template-columns: repeat(4, 1fr);
+grid-template-rows: 1fr;
+}
+
+.sizeBox {
+    border: 1px solid black;
+}
+
+.sizeClickDiv {
+    display: inline-flex;
+    margin: 1%;
+    height: 10px;
+}

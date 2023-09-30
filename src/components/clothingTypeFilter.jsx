@@ -9,9 +9,22 @@ import ReturnArr from "./clothingItems/clothingArrays";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+
+
 
 function ClothingTyleFilter(props) {
+  const [array1, setArray1] = useState([]);
+
   const returnArrFun = ReturnArr(props.items);
+
+  returnArrFun
+    .then((item) => {
+      setArray1(item);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 
   return (
     <div>
@@ -20,8 +33,8 @@ function ClothingTyleFilter(props) {
       <div className="itemsContainer">
         <Container fluid>
           <Row sm={12} md={2} lg={3} xl={4}>
-            {returnArrFun ? (
-              returnArrFun.map((obj) => (
+            {array1 ? (
+              array1.map((obj) => (
                 <div className="boxItem" key={Math.random()}>
                   <Link
                     onClick={() => {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 // comp
 import ItemSize from "./ItemCizeComp";
@@ -18,11 +18,28 @@ import "swiper/css/scrollbar";
 
 import "../style/cssForSwiper/Swiper.css";
 
-function Item(props) {
-  // --> problem broj je bio string umesto broj
-  const mainItem = props.arr.find((item) => item.id === Number(props.itemId));
+// Firebase
+import { db } from "../sing-in/fireBase/fireBaseUtils";
+import { collection, getDocs } from "firebase/firestore";
 
-  return (
+function Item(props) {
+  const [mainItem, setFillterdArr] = useState();
+
+ // console.log(props.clothingType);
+
+  useEffect(() => {
+    async function findItem() {
+      const itemRef = collection(db, props.clothingType);
+      const data = await getDocs(itemRef);
+      const items = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+      // console.log(items.find((item) => item.id === props.itemId));
+      const itemMain = items.find((item) => item.id === props.itemId);
+      setFillterdArr(itemMain);
+    }
+    findItem();
+  }, []);
+
+  return mainItem ? (
     <Container style={{ paddingLeft: 0, paddingRight: 0, overflow: "hidden" }}>
       <Row xs={1} sm={1} md={1} lg={2} xl={2}>
         <Col style={{ paddingLeft: 0, paddingRight: 0 }}>
@@ -88,6 +105,8 @@ function Item(props) {
         </Col>
       </Row>
     </Container>
+  ) : (
+    <></>
   );
 }
 
