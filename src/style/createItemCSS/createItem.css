@@ -13,3 +13,30 @@ grid-template-rows: 1fr;
     margin: 1%;
     height: 10px;
 }
+
+.allInfoDiv {
+    display: grid;
+grid-template-columns: 1fr;
+grid-template-rows: repeat(3, 1fr);
+}
+
+.centarItems {
+    text-align: center;
+
+margin: auto;
+width: 50%;
+}
+
+.dropD {
+    margin: 20px;
+}
+
+.inputsBox {
+    padding: 10px;
+}
+
+.inputFile {
+    padding: 5px;
+    display: block;
+    margin: auto;
+}

@@ -26,9 +26,6 @@ import malePic from "./images/article_aligned@2x.jpg";
 import femalePic from "./images/photoFemale.jpeg";
 import React, { useEffect, useState } from "react";
 
-// function
-import ReturnArr from "./components/clothingItems/clothingArrays";
-
 function App() {
   const [viewComp1] = useState(<Window1 fun1={selectClothingRout} />);
   const [viewComp2] = useState(<Window2 fun1={selectClothingRout} />);
@@ -37,14 +34,12 @@ function App() {
   function handleClick(num) {
     switch (num) {
       case 1:
-        // console.log("1");
         setViewComp3(viewComp1);
         if (viewComp3 === viewComp1) {
           setViewComp3(<InfoText />);
         }
         break;
       case 2:
-        // console.log("2");
         setViewComp3(viewComp2);
         if (viewComp3 === viewComp2) {
           setViewComp3(<InfoText />);
@@ -56,22 +51,17 @@ function App() {
     }
   }
 
-  let location = useLocation(); // dobijam rutu
+  let location = useLocation();
 
   const [routeLink, setRouteLink] = useState("/");
   const [ItemName, setItemName] = useState();
-  const [arrName, setArrName] = useState();
 
   function selectClothingRout(nameOfItems) {
-    // console.log(nameOfItems);
-    // console.log("/" + nameOfItems);
     setRouteLink("/" + nameOfItems);
     setItemName(nameOfItems);
   }
 
   useEffect(() => {
-    //  console.log(location.pathname);
-
     const parts = location.pathname.split("/");
     const lastUrlPart = parts.at(-1);
 
@@ -85,16 +75,8 @@ function App() {
     } else if (firstPartUrl !== "lista") {
       setRouteLink(firstPartUrl);
       setItemName(lastUrlPart);
-
-      const arrName = ReturnArr(firstPartUrl);
-      setArrName(arrName);
     }
   }, [location]);
-
-  /*  useEffect(() => {
-    const arrName = ReturnArr(routeLink);
-    setArrName(arrName);
-  }, []); */
 
   return (
     <div className="backG-Color">
@@ -148,13 +130,7 @@ function App() {
 
         <Route
           path={"/" + routeLink + "/" + ItemName}
-          element={
-            <Item
-              itemId={ItemName}
-              clothingType={routeLink}
-              arr={arrName}
-            ></Item>
-          }
+          element={<Item itemId={ItemName} clothingType={routeLink}></Item>}
         ></Route>
 
         <Route path="/CreateItems" element={<CreateItem />}></Route>

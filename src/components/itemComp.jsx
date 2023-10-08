@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 // comp
 import ItemSize from "./ItemCizeComp";
+import TypeOftclohingErr from "./errorNotfound/typeOfClothingErr";
 
 // Bootstrap
 import Container from "react-bootstrap/Container";
@@ -19,13 +20,15 @@ import "swiper/css/scrollbar";
 import "../style/cssForSwiper/Swiper.css";
 
 // Firebase
-import { db } from "../sing-in/fireBase/fireBaseUtils";
+import { db, storage } from "../sing-in/fireBase/fireBaseUtils";
 import { collection, getDocs } from "firebase/firestore";
+import { getDownloadURL, listAll, ref } from "firebase/storage";
 
 function Item(props) {
   const [mainItem, setFillterdArr] = useState();
+  const [promiseFinsihed, setPromiseFinish] = useState(false);
 
- // console.log(props.clothingType);
+  const [imagelist, setImagelist] = useState([]);
 
   useEffect(() => {
     async function findItem() {
@@ -35,78 +38,80 @@ function Item(props) {
       // console.log(items.find((item) => item.id === props.itemId));
       const itemMain = items.find((item) => item.id === props.itemId);
       setFillterdArr(itemMain);
+      setPromiseFinish(true);
     }
     findItem();
   }, []);
 
-  return mainItem ? (
-    <Container style={{ paddingLeft: 0, paddingRight: 0, overflow: "hidden" }}>
-      <Row xs={1} sm={1} md={1} lg={2} xl={2}>
-        <Col style={{ paddingLeft: 0, paddingRight: 0 }}>
-          <div className="slideDiv">
-            <Swiper
-              scrollbar={{
-                hide: true,
-              }}
-              modules={[Scrollbar]}
-              className="mySwiper"
-            >
-              <SwiperSlide>
-                <img className="Img" src={mainItem.pic1} alt="picMain"></img>
-              </SwiperSlide>
-              <SwiperSlide>
-                <img className="Img" src={mainItem.pic2} alt="picMain"></img>
-              </SwiperSlide>
-              <SwiperSlide>
-                <img className="Img" src={mainItem.pic3} alt="picMain"></img>
-              </SwiperSlide>
+  useEffect(() => {
+    const imageRef = ref(storage, `${props.clothingType}/${props.itemId}`);
+    listAll(imageRef).then((res) => {
+      res.items.forEach((item) => {
+        console.log(item);
+        getDownloadURL(item).then((url) => {
+          setImagelist((prev) => [...prev, url]);
+        });
+      });
+    });
 
-              {mainItem.pic4 ? (
-                <SwiperSlide>
-                  <img className="Img" src={mainItem.pic4} alt="picMain"></img>
-                </SwiperSlide>
-              ) : (
-                <></>
-              )}
+    console.log(props.itemId);
+    console.log(props.clothingType);
+  }, []);
 
-              {mainItem.pic5 ? (
-                <SwiperSlide>
-                  <img className="Img" src={mainItem.pic5} alt="picMain"></img>
-                </SwiperSlide>
-              ) : (
-                <></>
-              )}
+  return (
+    <div>
+      {promiseFinsihed ? (
+        mainItem ? (
+          <Container
+            style={{ paddingLeft: 0, paddingRight: 0, overflow: "hidden" }}
+          >
+            <Row xs={1} sm={1} md={1} lg={2} xl={2}>
+              <Col style={{ paddingLeft: 0, paddingRight: 0 }}>
+                <div className="slideDiv">
+                  <Swiper
+                    scrollbar={{
+                      hide: true,
+                    }}
+                    modules={[Scrollbar]}
+                    className="mySwiper"
+                  >
+                    {imagelist.map((url) => {
+                      return (
+                        <SwiperSlide>
+                          <img className="Img" src={url} alt="picMain"></img>
+                        </SwiperSlide>
+                      );
+                    })}
+                  </Swiper>
+                </div>
+              </Col>
+              <Col className="centarItems">
+                <div className="mainInfoDiv">
+                  <h2>{mainItem.name}</h2>
+                  <h2>{mainItem.price}.00 din</h2>
+                </div>
+                <div className="moreInfo">
+                  <p>{mainItem.info1}</p>
+                </div>
 
-              {mainItem.pic6 ? (
-                <SwiperSlide>
-                  <img className="Img" src={mainItem.pic6} alt="picMain"></img>
-                </SwiperSlide>
-              ) : (
-                <></>
-              )}
-            </Swiper>
-          </div>
-        </Col>
-        <Col className="centarItems">
-          <div className="mainInfoDiv">
-            <h2>{mainItem.name}</h2>
-            <h2>{mainItem.price}.00 din</h2>
-          </div>
-          <div className="moreInfo">
-            <p>{mainItem.info1}</p>
-          </div>
-
-          <div className="sizeValueDiv">
-            <ItemSize sizeValue={mainItem.sizeS} sizeName="S" />
-            <ItemSize sizeValue={mainItem.sizeM} sizeName="M" />
-            <ItemSize sizeValue={mainItem.sizeL} sizeName="L" />
-            <ItemSize sizeValue={mainItem.sizeXL} sizeName="XL" />
-          </div>
-        </Col>
-      </Row>
-    </Container>
-  ) : (
-    <></>
+                <div className="sizeValueDiv">
+                  <ItemSize sizeValue={mainItem.sizeS} sizeName="S" />
+                  <ItemSize sizeValue={mainItem.sizeM} sizeName="M" />
+                  <ItemSize sizeValue={mainItem.sizeL} sizeName="L" />
+                  <ItemSize sizeValue={mainItem.sizeXL} sizeName="XL" />
+                </div>
+              </Col>
+            </Row>
+          </Container>
+        ) : (
+          <>
+            <TypeOftclohingErr />
+          </>
+        )
+      ) : (
+        <></>
+      )}
+    </div>
   );
 }
 
