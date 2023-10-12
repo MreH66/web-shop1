@@ -40,3 +40,52 @@ width: 50%;
     display: block;
     margin: auto;
 }
+
+p {
+    margin-bottom: 5px;
+}
+
+
+
+.confirmation {
+   text-align: center;
+}
+
+.ButtonX {
+    position: absolute;
+     margin: 5px;
+}
+
+.img1 {
+    height: 4vh;
+}
+
+.containerCreateItem{
+    background: white;
+    border-radius: 0% 0% 0% 0% / 0% 0% 0% 0% ;
+    box-shadow: 8px 8px rgba(0,0,0,.15);
+
+    width: 40%;
+    right: 0;
+    left: 0;
+    top: 30vh;
+    bottom: 35vh;
+    margin: auto;
+    position: absolute;
+}
+
+.ButtonX:hover
+{
+    cursor: pointer;
+}
+
+.text1111 {
+    transition: box-shadow .5s;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+}
+
+@media only screen and (max-width: 600px) {
+   .containerCreateItem {
+    width: 80%;
+   }
+  }

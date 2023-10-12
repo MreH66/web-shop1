@@ -20,12 +20,10 @@ import Row from "react-bootstrap/Row";
 
 // storgae
 import { getDownloadURL, listAll, ref } from "firebase/storage";
-import { First } from "react-bootstrap/esm/PageItem";
 
 function ClothingTyleFilter(props) {
   const [itemId, setItemID] = useState();
   const [items, setItems] = useState([]);
-  const [imageArr, setImgArr] = useState([]);
 
   // path
   let location = useLocation();
@@ -62,13 +60,16 @@ function ClothingTyleFilter(props) {
         if (docSnap.exists()) {
           // console.log(docSnap.data());
           listAll(imageRef).then((res) => {
-            const imgItem = res.items[0];
+            function item() {
+              for (let num = 0; num < res.items.length; num++) {
+                if (res.items[num].fullPath.includes("first")) {
+                  return res.items[num];
+                }
+              }
+            }
+            const item1 = item();
 
-            console.log("+++++");
-            console.log(imgItem);
-
-            getDownloadURL(imgItem).then((url) => {
-              // console.log(url);
+            getDownloadURL(item1).then((url) => {
               const itemFromdb = docSnap.data();
               const { name, price } = itemFromdb;
               setItems((prev) => [...prev, { name, price, url, element }]);
@@ -81,16 +82,6 @@ function ClothingTyleFilter(props) {
       getitem();
     });
   }, [itemId]);
-
-  useEffect(() => {
-    /* const itemImg = imageArr.find(
-      (element) =>
-        element ===
-        "suknja/8085ed6b69874121a15c5e373c1656d9/fifth:aa9a8a7c-e18e-406a-abcd-26376f177833"
-    );
-    console.log(itemImg); */
-    console.log(imageArr);
-  }, [imageArr]);
 
   return (
     <div>

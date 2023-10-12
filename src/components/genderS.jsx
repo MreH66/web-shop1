@@ -12,7 +12,7 @@ function GenderS(props) {
       className="ganderDiv"
     >
       <h2 className="genderName">
-        <span>{props.gender}</span>
+        <span className="span2">{props.gender}</span>
       </h2>
     </div>
   );
