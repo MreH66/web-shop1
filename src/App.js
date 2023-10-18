@@ -9,12 +9,13 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 // components
-import Header from "./components/header";
-import GenderS from "./components/genderS";
+import Header from "./components/MainComp/header";
+import GenderS from "./components/smallComp/genderS";
 import CreateItem from "./components/CreateItem.com/createItemMain";
+import TypeOftclohingErr from "./components/errorNotfound/typeOfClothingErr";
 
 // import Footer1 from "./components/footer";
-import InfoText from "./components/info";
+import InfoText from "./components/MainComp/info";
 import ClothingTyleFilter from "./components/clothingTypeFilter";
 import Item from "./components/itemComp";
 // windows
@@ -30,6 +31,9 @@ function App() {
   const [viewComp1] = useState(<Window1 fun1={selectClothingRout} />);
   const [viewComp2] = useState(<Window2 fun1={selectClothingRout} />);
   const [viewComp3, setViewComp3] = useState(<InfoText />);
+
+  //err
+  const [errRoute, setErrRoute] = useState(<></>);
 
   function handleClick(num) {
     switch (num) {
@@ -68,13 +72,14 @@ function App() {
     const parts1 = location.pathname.split("/");
     const firstPartUrl = parts1.at(1);
 
-    console.log(firstPartUrl);
     if (firstPartUrl === "lista") {
       setRouteLink(lastUrlPart);
       setItemName(lastUrlPart);
     } else if (firstPartUrl !== "lista") {
       setRouteLink(firstPartUrl);
       setItemName(lastUrlPart);
+    } else {
+      setErrRoute(<Route path="*" element={<TypeOftclohingErr />} />);
     }
   }, [location]);
 
@@ -114,7 +119,6 @@ function App() {
             </div>
           }
         ></Route>
-
         <Route
           exact
           path={"/lista/" + routeLink}
@@ -127,13 +131,12 @@ function App() {
             </div>
           }
         ></Route>
-
         <Route
           path={"/" + routeLink + "/" + ItemName}
           element={<Item itemId={ItemName} clothingType={routeLink}></Item>}
         ></Route>
-
         <Route path="/CreateItems" element={<CreateItem />}></Route>
+        {errRoute}
       </Routes>
     </div>
   );

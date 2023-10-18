@@ -5,8 +5,8 @@ import "../style/windows.css";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-import ClothingType from "./clothingType";
-import ClothingManu from "./clothingManu";
+import ClothingType from "./smallComp/clothingType";
+import ClothingManu from "./smallComp/clothingManu";
 
 import clothType from "../images/shirt-line.png";
 

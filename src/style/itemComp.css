@@ -42,6 +42,8 @@
   opacity: 1;
 }
 
+/* else  */
+
 .listUpdateDiv {
     transition: height .4s ease;
 }

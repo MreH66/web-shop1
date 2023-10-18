@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 
 //css
 import "../style/itemComp.css";
 
+// router
+import { useNavigate } from "react-router-dom";
+
 // comp
-import ItemSize from "./ItemCizeComp";
+import ItemSize from "./smallComp/ItemCizeComp";
 import TypeOftclohingErr from "./errorNotfound/typeOfClothingErr";
 
 // Bootstrap
@@ -19,7 +22,6 @@ import { Scrollbar } from "swiper/modules";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/scrollbar";
-
 import "../style/cssForSwiper/Swiper.css";
 
 // Firebase
@@ -32,11 +34,11 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { getDownloadURL, listAll, ref, deleteObject } from "firebase/storage";
-import { v4 } from "uuid";
+
+import { UserContext } from "./Context/user.contest";
 
 function Item(props) {
   const [mainItem, setFillterdArr] = useState();
-  const [promiseFinsihed, setPromiseFinish] = useState(false);
 
   const [imagelist, setImagelist] = useState([]);
 
@@ -52,6 +54,14 @@ function Item(props) {
   const [sizeState3, setSizeState3] = useState(false);
   const [sizeState4, setSizeState4] = useState(false);
 
+  const [ArrImg, setArrImg] = useState([]);
+  const [numberChange1, setNumberChnage1] = useState(0);
+
+  // Context
+  const { currenUser } = useContext(UserContext);
+
+  const navigate = useNavigate();
+
   // info set
   useEffect(() => {
     async function findItem() {
@@ -59,35 +69,49 @@ function Item(props) {
       const data = await getDocs(itemRef);
       const items = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
       const itemMain = items.find((item) => item.id === props.itemId);
+
+      if (itemMain === undefined) {
+        setFillterdArr(false);
+        return;
+      }
+
       const { name, price, info1 } = itemMain;
+
+      // setters
       setName(name);
       setPrice(price);
       setTextInfo(info1);
 
       //
       setFillterdArr(itemMain);
-      setPromiseFinish(true);
     }
     findItem();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // img set
   useEffect(() => {
     const imageRef = ref(storage, `${props.clothingType}/${props.itemId}`);
     listAll(imageRef).then((res) => {
       res.items.forEach((item) => {
-        console.log(item);
         getDownloadURL(item).then((url) => {
           setImagelist((prev) => [...prev, url]);
         });
       });
     });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    console.log(props.itemId);
-    console.log(props.clothingType);
-  }, []);
+  useEffect(() => {
+    imagelist.forEach((item) => {
+      if (item.includes(`%3A${numberChange1}%`)) {
+        if (numberChange1 !== imagelist.length) {
+          setNumberChnage1(numberChange1 + 1);
+        }
+        setArrImg((prev) => [...prev, item]);
+      }
+    });
+  }, [imagelist, numberChange1]);
 
-  
+  // itame Delete
   async function deleteItem(collection, id) {
     // firestore
     const itemDoc = doc(db, collection, id);
@@ -101,7 +125,7 @@ function Item(props) {
           const itemRef = ref(storage, url);
           deleteObject(itemRef)
             .then(() => {
-              console.log("item deleted");
+              navigate("/");
             })
             .catch((err) => console.log(err));
         });
@@ -122,135 +146,135 @@ function Item(props) {
       info1: textInfo,
     };
 
-    await updateDoc(itemDoc, newFields).then(console.log("Azuriranje uspesno"));
+    await updateDoc(itemDoc, newFields).then(navigate(0)); // timer i neka animcaija na dugmetu
   }
 
-  return (
-    <div>
-      {promiseFinsihed ? (
-        mainItem ? (
-          <Container
-            style={{ paddingLeft: 0, paddingRight: 0, overflow: "hidden" }}
-          >
-            <Row xs={1} sm={1} md={1} lg={2} xl={2}>
-              <Col style={{ paddingLeft: 0, paddingRight: 0 }}>
-                <div className="slideDiv">
-                  <Swiper
-                    scrollbar={{
-                      hide: true,
-                    }}
-                    modules={[Scrollbar]}
-                    className="mySwiper"
-                  >
-                    {imagelist.map((url) => {
-                      return (
-                        <SwiperSlide key={v4}>
-                          <img className="Img" src={url} alt="picMain"></img>
-                        </SwiperSlide>
-                      );
-                    })}
-                  </Swiper>
+  if (mainItem) {
+    return (
+      <Container
+        style={{ paddingLeft: 0, paddingRight: 0, overflow: "hidden" }}
+      >
+        <Row xs={1} sm={1} md={1} lg={2} xl={2}>
+          <Col style={{ paddingLeft: 0, paddingRight: 0 }}>
+            <div className="slideDiv">
+              <Swiper
+                scrollbar={{
+                  hide: true,
+                }}
+                modules={[Scrollbar]}
+                className="mySwiper"
+              >
+                {ArrImg.map((url) => {
+                  return (
+                    <SwiperSlide key={Math.random()}>
+                      <img className="Img" src={url} alt="picMain"></img>
+                    </SwiperSlide>
+                  );
+                })}
+              </Swiper>
+            </div>
+          </Col>
+          <Col className="centarItems111">
+            {listUpDate ? (
+              <div>
+                <div className="mainInfoDiv">
+                  <h2 className="middle1">{mainItem.name}</h2>
+                  <h2 className="middle1">{mainItem.price}.00 din</h2>
                 </div>
-              </Col>
-              <Col className="centarItems">
-                {listUpDate ? (
-                  <div>
-                    <div className="mainInfoDiv">
-                      <h2>{mainItem.name}</h2>
-                      <h2>{mainItem.price}.00 din</h2>
-                    </div>
-                    <div className="moreInfo">
-                      <p>{mainItem.info1}</p>
-                    </div>
+                <div className="moreInfo">
+                  <p>{mainItem.info1}</p>
+                </div>
 
-                    <div className="sizeValueDiv">
-                      <ItemSize sizeValue={mainItem.sizeS} sizeName="S" />
-                      <ItemSize sizeValue={mainItem.sizeM} sizeName="M" />
-                      <ItemSize sizeValue={mainItem.sizeL} sizeName="L" />
-                      <ItemSize sizeValue={mainItem.sizeXL} sizeName="XL" />
-                    </div>
+                <div className="sizeValueDiv">
+                  <ItemSize sizeValue={mainItem.sizeS} sizeName="S" />
+                  <ItemSize sizeValue={mainItem.sizeM} sizeName="M" />
+                  <ItemSize sizeValue={mainItem.sizeL} sizeName="L" />
+                  <ItemSize sizeValue={mainItem.sizeXL} sizeName="XL" />
+                </div>
+              </div>
+            ) : (
+              <>
+                <div>
+                  <label className="labelMain">Ime</label>
+                  <input
+                    value={name}
+                    type="string"
+                    placeholder="Name..."
+                    onChange={(event) => {
+                      setName(event.target.value);
+                    }}
+                  ></input>
+                  <label className="labelMain">cena</label>
+                  <input
+                    value={price}
+                    type="number"
+                    placeholder="Price..."
+                    onChange={(event) => {
+                      setPrice(event.target.value);
+                    }}
+                  ></input>
+                </div>
+
+                <div>
+                  <p>Add info</p>
+                  <textarea
+                    value={textInfo}
+                    onChange={(event) => {
+                      setTextInfo(event.target.value);
+                    }}
+                    name="postContent"
+                    rows={4}
+                    cols={40}
+                  />
+                </div>
+
+                <div>
+                  <div
+                    className="sizeClickDiv"
+                    onClick={() => {
+                      setSizeState1(!sizeState1);
+                    }}
+                  >
+                    <ItemSize sizeValue={sizeState1} sizeName={"S"} />
                   </div>
-                ) : (
-                  <>
-                    <div>
-                      <label className="labelMain">Ime</label>
-                      <input
-                        value={name}
-                        type="string"
-                        placeholder="Name..."
-                        onChange={(event) => {
-                          setName(event.target.value);
-                        }}
-                      ></input>
-                      <label className="labelMain">cena</label>
-                      <input
-                        value={price}
-                        type="number"
-                        placeholder="Price..."
-                        onChange={(event) => {
-                          setPrice(event.target.value);
-                        }}
-                      ></input>
-                    </div>
 
-                    <div>
-                      <p>Add info</p>
-                      <textarea
-                        value={textInfo}
-                        onChange={(event) => {
-                          setTextInfo(event.target.value);
-                        }}
-                        name="postContent"
-                        rows={4}
-                        cols={40}
-                      />
-                    </div>
+                  <div
+                    className="sizeClickDiv"
+                    onClick={() => {
+                      setSizeState2(!sizeState2);
+                    }}
+                  >
+                    <ItemSize sizeValue={sizeState2} sizeName={"M"} />
+                  </div>
 
-                    <div>
-                      <div
-                        className="sizeClickDiv"
-                        onClick={() => {
-                          setSizeState1(!sizeState1);
-                        }}
-                      >
-                        <ItemSize sizeValue={sizeState1} sizeName={"S"} />
-                      </div>
+                  <div
+                    className="sizeClickDiv"
+                    onClick={() => {
+                      setSizeState3(!sizeState3);
+                    }}
+                  >
+                    <ItemSize sizeValue={sizeState3} sizeName={"L"} />
+                  </div>
 
-                      <div
-                        className="sizeClickDiv"
-                        onClick={() => {
-                          setSizeState2(!sizeState2);
-                        }}
-                      >
-                        <ItemSize sizeValue={sizeState2} sizeName={"M"} />
-                      </div>
+                  <div
+                    className="sizeClickDiv"
+                    onClick={() => {
+                      setSizeState4(!sizeState4);
+                    }}
+                  >
+                    <ItemSize sizeValue={sizeState4} sizeName={"XL"} />
+                  </div>
+                </div>
+                <div className="buttonDiv">
+                  <button className="button-23" onClick={upDate}>
+                    Potvrdi
+                  </button>
+                </div>
+              </>
+            )}
 
-                      <div
-                        className="sizeClickDiv"
-                        onClick={() => {
-                          setSizeState3(!sizeState3);
-                        }}
-                      >
-                        <ItemSize sizeValue={sizeState3} sizeName={"L"} />
-                      </div>
-
-                      <div
-                        className="sizeClickDiv"
-                        onClick={() => {
-                          setSizeState4(!sizeState4);
-                        }}
-                      >
-                        <ItemSize sizeValue={sizeState4} sizeName={"XL"} />
-                      </div>
-                    </div>
-                    <div className="buttonDiv">
-                      <button className="button-23" onClick={upDate}>
-                        Potvrdi
-                      </button>
-                    </div>
-                  </>
-                )}
-
+            <div>
+              {currenUser ? (
                 <div>
                   <div className="buttonDiv">
                     <button
@@ -271,19 +295,21 @@ function Item(props) {
                     </button>
                   </div>
                 </div>
-              </Col>
-            </Row>
-          </Container>
-        ) : (
-          <>
-            <TypeOftclohingErr />
-          </>
-        )
-      ) : (
-        <></>
-      )}
-    </div>
-  );
+              ) : (
+                <></>
+              )}
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    );
+  } else if (mainItem === false) {
+    return (
+      <>
+        <TypeOftclohingErr />
+      </>
+    );
+  }
 }
 
 export default Item;

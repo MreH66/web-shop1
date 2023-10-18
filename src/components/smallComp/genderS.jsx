@@ -1,4 +1,4 @@
-import "../style/genderDiv.css";
+import "../../style/genderDiv.css";
 
 function GenderS(props) {
   return (

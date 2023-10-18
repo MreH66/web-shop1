@@ -1,4 +1,4 @@
-import "../style/clothingType.css";
+import "../../style/clothingType.css";
 
 import { Link } from "react-router-dom";
 

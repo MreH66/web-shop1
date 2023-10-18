@@ -1,4 +1,4 @@
-import "../style/info.css";
+import "../../style/info.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 //bootstrap

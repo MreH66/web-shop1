@@ -1,13 +1,17 @@
 import "../../style/createItemCSS/createItem.css";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
-import exitIMG from "../../images/x-mark.png";
+// router
+import { useNavigate } from "react-router-dom";
 
 //Bootstrap
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Form from "react-bootstrap/Form";
 
 // MDB
 import {
@@ -26,13 +30,18 @@ import { ref, uploadBytes } from "firebase/storage";
 // uuid
 import { v4 } from "uuid";
 
-import ItemSize from "../ItemCizeComp";
+import ItemSize from "../smallComp/ItemCizeComp";
+import AdminNotFound from "../errorNotfound/adminNotFound";
+import { UserContext } from "../Context/user.contest";
 
 function CreateItem() {
   // info item
   const [name, setName] = useState("");
   const [price, setPrice] = useState(null);
   const [textInfo, setTextInfo] = useState("");
+
+  // Context
+  const { currenUser } = useContext(UserContext);
 
   // sizeState
   const [sizeState1, setSizeState1] = useState(false);
@@ -56,6 +65,8 @@ function CreateItem() {
 
   //ConfiramtionScreen
   const [comp, setComp] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setRandomId(v4().toString().replaceAll("-", ""));
@@ -106,78 +117,52 @@ function CreateItem() {
       date: new Date(),
     }).then(() => randomId);
 
-    const imageRef = ref(
-      storage,
-      `${collectionName}/${randomId}/first:${v4()}`
-    );
-    const imageRe2 = ref(
-      storage,
-      `${collectionName}/${randomId}/second:${v4()}`
-    );
-    const imageRe3 = ref(
-      storage,
-      `${collectionName}/${randomId}/third:${v4()}`
-    );
-    const imageRe4 = ref(
-      storage,
-      `${collectionName}/${randomId}/fourth:${v4()}`
-    );
-    const imageRe5 = ref(
-      storage,
-      `${collectionName}/${randomId}/fifth:${v4()}`
-    );
-    const imageRe6 = ref(
-      storage,
-      `${collectionName}/${randomId}/sixth:${v4()}`
-    );
+    const imageRef = ref(storage, `${collectionName}/${randomId}/:0:${v4()}`);
+    const imageRe2 = ref(storage, `${collectionName}/${randomId}/:1:${v4()}`);
+    const imageRe3 = ref(storage, `${collectionName}/${randomId}/:2:${v4()}`);
+    const imageRe4 = ref(storage, `${collectionName}/${randomId}/:3:${v4()}`);
+    const imageRe5 = ref(storage, `${collectionName}/${randomId}/:4:${v4()}`);
+    const imageRe6 = ref(storage, `${collectionName}/${randomId}/:5:${v4()}`);
 
-    if (image1 !== null) {
-      uploadBytes(imageRef, image1).then(() => {
-        console.log("pic1", image1);
-      });
-    } else {
-      return;
+    function upLoadAllPic() {
+      if (image1 !== null) {
+        uploadBytes(imageRef, image1).then(() => {
+          console.log("Upload uspesan", image1);
+        });
+      }
+
+      if (image2 !== null) {
+        uploadBytes(imageRe2, image2).then(() => {
+          console.log("Upload uspesan", imageRe2);
+        });
+      }
+
+      if (image3 !== null) {
+        uploadBytes(imageRe3, image3).then(() => {
+          console.log("Upload uspesan", imageRe3);
+        });
+      }
+
+      if (image4 !== null) {
+        uploadBytes(imageRe4, image4).then(() => {
+          console.log("Upload uspesan", imageRe4);
+        });
+      }
+
+      if (image5 !== null) {
+        uploadBytes(imageRe5, image5).then(() => {
+          console.log("Upload uspesan", imageRe5);
+        });
+      }
+
+      if (image6 !== null) {
+        uploadBytes(imageRe6, image6).then(() => {
+          console.log("Upload uspesan", imageRe6);
+        });
+      }
     }
 
-    if (image2 !== null) {
-      uploadBytes(imageRe2, image2).then(() => {
-        console.log("pic2");
-      });
-    } else {
-      return;
-    }
-
-    if (image3 !== null) {
-      uploadBytes(imageRe3, image3).then(() => {
-        console.log("pic3");
-      });
-    } else {
-      return;
-    }
-
-    if (image4 !== null) {
-      uploadBytes(imageRe4, image4).then(() => {
-        console.log("pic4", imageRe4);
-      });
-    } else {
-      return;
-    }
-
-    if (image5 !== null) {
-      uploadBytes(imageRe5, image5).then(() => {
-        console.log("pic5", imageRe5);
-      });
-    } else {
-      return;
-    }
-
-    if (image6 !== null) {
-      uploadBytes(imageRe6, image6).then(() => {
-        console.log("pic6", imageRe6);
-      });
-    } else {
-      return;
-    }
+    upLoadAllPic();
   };
 
   function showConfirmation() {
@@ -202,29 +187,6 @@ function CreateItem() {
       </>
     );
   }
-
-  /*
-<div className="confirmation">
-          <div className="ButtonX">
-            <img className="img1" src={exitIMG}></img>
-          </div>
-          <h2>potrvda</h2>
-          <div>
-            <h3>Ime</h3>
-            <p>{name}</p>
-          </div>
-          <div>
-            <h3>Cena</h3>
-            <p>{price}</p>
-          </div>
-          <div>
-            <button className="button-23" onClick={createItem}>
-              Add item
-            </button>
-          </div>
-        </div>
-*/
-
   if (comp) {
     return (
       <>
@@ -272,6 +234,12 @@ function CreateItem() {
         </Container>
       </>
     );
+  } else if (currenUser === null) {
+    return (
+      <>
+        <AdminNotFound />
+      </>
+    );
   } else {
     return (
       <div>
@@ -310,88 +278,124 @@ function CreateItem() {
         </div>
 
         <Container fluid>
-          <Row sm={1} md={2} lg={2} xl={2}>
+          <Row sm={1} md={1} lg={2} xl={2}>
             <div className="inputsBox centarItems">
-              <div>
+              <ol className="lista">
                 <p>Main img</p>
-                <input
-                  className="inputFile"
-                  type="file"
-                  onChange={(event) => {
-                    setImage1(event.target.files[0]);
-                  }}
-                />
-                <br />
-              </div>
-
-              <input
-                className="inputFile"
-                type="file"
-                onChange={(event) => {
-                  setImage2(event.target.files[0]);
-                }}
-              />
-              <input
-                className="inputFile"
-                type="file"
-                onChange={(event) => {
-                  setImage3(event.target.files[0]);
-                }}
-              />
-              <input
-                className="inputFile"
-                type="file"
-                onChange={(event) => {
-                  setImage4(event.target.files[0]);
-                }}
-              />
-              <input
-                className="inputFile"
-                type="file"
-                onChange={(event) => {
-                  setImage5(event.target.files[0]);
-                }}
-              />
-              <input
-                className="inputFile"
-                type="file"
-                onChange={(event) => {
-                  setImage6(event.target.files[0]);
-                }}
-              />
+                <li>
+                  <div>
+                    <input
+                      className="inputFile"
+                      type="file"
+                      onChange={(event) => {
+                        setImage1(event.target.files[0]);
+                      }}
+                    />
+                    <br />
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <input
+                      className="inputFile"
+                      type="file"
+                      onChange={(event) => {
+                        setImage2(event.target.files[0]);
+                      }}
+                    />
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <input
+                      className="inputFile"
+                      type="file"
+                      onChange={(event) => {
+                        setImage3(event.target.files[0]);
+                      }}
+                    />
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <input
+                      className="inputFile"
+                      type="file"
+                      onChange={(event) => {
+                        setImage4(event.target.files[0]);
+                      }}
+                    />
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <input
+                      className="inputFile"
+                      type="file"
+                      onChange={(event) => {
+                        setImage5(event.target.files[0]);
+                      }}
+                    />
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <input
+                      className="inputFile"
+                      type="file"
+                      onChange={(event) => {
+                        setImage6(event.target.files[0]);
+                      }}
+                    />
+                  </div>
+                </li>
+              </ol>
             </div>
             <div>
               <div className="allInfoDiv centarItems">
-                <div>
-                  <input
-                    type="string"
-                    placeholder="Name..."
-                    onChange={(event) => {
-                      setName(event.target.value);
-                    }}
-                  ></input>
-                  <input
-                    type="number"
-                    placeholder="Price..."
-                    onChange={(event) => {
-                      setPrice(event.target.value);
-                    }}
-                  ></input>
+                <>
+                  <FloatingLabel
+                    controlId="floatingInput"
+                    label="Ime"
+                    className="mb-3"
+                  >
+                    <Form.Control
+                      style={{ height: "50px" }}
+                      className="floating111"
+                      type="string"
+                      placeholder="ime"
+                      onChange={(event) => {
+                        setName(event.target.value);
+                      }}
+                    />
+                  </FloatingLabel>
+                  <FloatingLabel controlId="Cena" label="Cena">
+                    <Form.Control
+                      style={{ height: "50px" }}
+                      className="floating111"
+                      onChange={(event) => {
+                        setPrice(event.target.value);
+                      }}
+                      type="number"
+                      placeholder="cena"
+                    />
+                  </FloatingLabel>
+                </>
+
+                <div className="textAr">
+                  <FloatingLabel controlId="floatingTextarea2" label="Comments">
+                    <Form.Control
+                      onChange={(event) => {
+                        setTextInfo(event.target.value);
+                      }}
+                      as="textarea"
+                      placeholder="info"
+                      style={{ height: "20vh" }}
+                    />
+                  </FloatingLabel>
                 </div>
 
-                <div>
-                  <p>Add info</p>
-                  <textarea
-                    onChange={(event) => {
-                      setTextInfo(event.target.value);
-                    }}
-                    name="postContent"
-                    rows={4}
-                    cols={40}
-                  />
-                </div>
-
-                <div>
+                <div className="sizesDiv1111">
                   <div
                     className="sizeClickDiv"
                     onClick={() => {
@@ -433,7 +437,7 @@ function CreateItem() {
           </Row>
         </Container>
         {comp}
-        <div className="centarItems">
+        <div className="centarItems butt1">
           <button className="button-23" onClick={showConfirmation}>
             Add item
           </button>
@@ -444,21 +448,4 @@ function CreateItem() {
 }
 
 export default CreateItem;
-
-// <button onClick={uploadimg}>upload images</button>
-
-/*
- <>
-        <div className="confirmation">
-          <h2>potrvda</h2>
-          <ol>
-            <li>{name}</li>
-            <li>{price}</li>
-            <li>{textInfo}</li>
-          </ol>
-          <div>
-            <button onClick={createItem}>Add item</button>
-          </div>
-        </div>
-      </>
-*/
+// da imam nacin da se vidi kada je upload gotov

@@ -1,4 +1,4 @@
-import "../style/ItemSize.css";
+import "../../style/ItemSize.css";
 
 function ItemSize(props) {
   return (

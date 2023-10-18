@@ -31,10 +31,10 @@ header {
 .optionsP {
   z-index: 10;
  padding: 0.2rem;
- padding-left: 1.2rem;
-padding-right: 1.2rem;
+ padding-left: 1rem;
+padding-right: 1rem;
 
-margin-right: 3%;
+margin-right: 2.5%;
 
  float: right;
 

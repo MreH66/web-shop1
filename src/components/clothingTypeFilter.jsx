@@ -11,7 +11,7 @@ import { collection, doc, getDocs, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { v4 } from "uuid";
 // imports
-import ClothingItem from "./clothingItems";
+import ClothingItem from "./smallComp/clothingItems";
 import TypeOftclohingErr from "./errorNotfound/typeOfClothingErr";
 
 // bootstrap
@@ -42,7 +42,7 @@ function ClothingTyleFilter(props) {
       setItemID(finalDataID);
     };
     getItemID();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (itemId === undefined) {
@@ -58,30 +58,31 @@ function ClothingTyleFilter(props) {
         const imageRef = ref(storage, `${props.items}/${element}`);
 
         if (docSnap.exists()) {
-          // console.log(docSnap.data());
-          listAll(imageRef).then((res) => {
-            function item() {
-              for (let num = 0; num < res.items.length; num++) {
-                if (res.items[num].fullPath.includes("first")) {
-                  return res.items[num];
+          listAll(imageRef)
+            .then((res) => {
+              function item() {
+                for (let num = 0; num < res.items.length; num++) {
+                  if (res.items[num].fullPath.includes(":0:")) {
+                    return res.items[num];
+                  }
                 }
               }
-            }
-            const item1 = item();
+              const item1 = item();
 
-            getDownloadURL(item1).then((url) => {
-              const itemFromdb = docSnap.data();
-              const { name, price } = itemFromdb;
-              setItems((prev) => [...prev, { name, price, url, element }]);
-            });
-          });
+              getDownloadURL(item1).then((url) => {
+                const itemFromdb = docSnap.data();
+                const { name, price } = itemFromdb;
+                setItems((prev) => [...prev, { name, price, url, element }]);
+              });
+            })
+            .catch((err) => console.log(err));
         } else {
           console.log("No such document!");
         }
       };
       getitem();
     });
-  }, [itemId]);
+  }, [itemId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>
@@ -120,52 +121,4 @@ function ClothingTyleFilter(props) {
 }
 
 export default ClothingTyleFilter;
-
-/*
- const [info1, name, price, sizeL, sizeS, sizeM, sizeXL] = itemFromdb;
-*/
-
-/*
-  {promiseFinished ? (
-        <div>
-          <h2 className="mainItemName">{props.items}</h2>
-
-          <div className="itemsContainer">
-            <Container fluid>
-              <Row sm={12} md={2} lg={3} xl={4}>
-                {array1 ? (
-                  array1.map((obj) => (
-                    <div className="boxItem" key={v4()}>
-                      <Link
-                        onClick={() => {
-                          props.functionGetRoute(obj.id, props.items);
-                        }}
-                        to={"/" + props.items + "/" + obj.id}
-                      >
-                        <ClothingItem
-                          name={obj.name}
-                          price={obj.price}
-                          MainPicture={obj.pic1}
-                        />
-                      </Link>
-                    </div>
-                  ))
-                ) : (
-                  <TypeOftclohingErr />
-                )}
-              </Row>
-            </Container>
-          </div>
-        </div>
-      ) : (
-        <></>
-      )}
-*/
-
-/*
- imageArr.find(
-      (element) =>
-        element ===
-        "suknja/8085ed6b69874121a15c5e373c1656d9/fifth:aa9a8a7c-e18e-406a-abcd-26376f177833"
-    );
-*/
+// renderovanje po redosledu vreme dodato

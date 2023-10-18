@@ -1,5 +1,5 @@
 // css
-import "../style/clothingItemBox.css";
+import "../../style/clothingItemBox.css";
 
 function ClothingItem(props) {
   return (

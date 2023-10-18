@@ -1,5 +1,3 @@
-
-
 function ClothingManu(props) {
   return (
     <div
