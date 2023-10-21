@@ -33,6 +33,7 @@ import { v4 } from "uuid";
 import ItemSize from "../smallComp/ItemCizeComp";
 import AdminNotFound from "../errorNotfound/adminNotFound";
 import { UserContext } from "../Context/user.contest";
+import { Prev } from "react-bootstrap/esm/PageItem";
 
 function CreateItem() {
   // info item
@@ -64,7 +65,10 @@ function CreateItem() {
   const [image6, setImage6] = useState(null);
 
   //ConfiramtionScreen
-  const [comp, setComp] = useState(false);
+  const [comp, setComp] = useState(2);
+
+  // setter if all images are uploaded
+  const arrValues = [];
 
   const navigate = useNavigate();
 
@@ -102,9 +106,11 @@ function CreateItem() {
   const createItem = async () => {
     if (name === "" || image1 === null || price === null) {
       alert("jedno od polja je prazno");
-      setComp(false);
+      setComp(2);
       return;
     }
+
+    let textDate = new Date().toLocaleString();
 
     await setDoc(doc(itemCollectionRef, randomId), {
       name: name,
@@ -114,7 +120,7 @@ function CreateItem() {
       sizeL: sizeState3,
       sizeXL: sizeState4,
       info1: textInfo,
-      date: new Date(),
+      date: textDate,
     }).then(() => randomId);
 
     const imageRef = ref(storage, `${collectionName}/${randomId}/:0:${v4()}`);
@@ -126,68 +132,76 @@ function CreateItem() {
 
     function upLoadAllPic() {
       if (image1 !== null) {
+        arrValues.push(false);
         uploadBytes(imageRef, image1).then(() => {
-          console.log("Upload uspesan", image1);
+          arrValues[0] = true;
+          isEverythingDownloaded();
         });
       }
 
       if (image2 !== null) {
+        arrValues.push(false);
         uploadBytes(imageRe2, image2).then(() => {
-          console.log("Upload uspesan", imageRe2);
+          arrValues[1] = true;
+          isEverythingDownloaded();
         });
       }
 
       if (image3 !== null) {
+        arrValues.push(false);
         uploadBytes(imageRe3, image3).then(() => {
-          console.log("Upload uspesan", imageRe3);
+          arrValues[2] = true;
+          isEverythingDownloaded();
         });
       }
 
       if (image4 !== null) {
+        arrValues.push(false);
         uploadBytes(imageRe4, image4).then(() => {
-          console.log("Upload uspesan", imageRe4);
+          arrValues[3] = true;
+          isEverythingDownloaded();
         });
       }
 
       if (image5 !== null) {
+        arrValues.push(false);
         uploadBytes(imageRe5, image5).then(() => {
-          console.log("Upload uspesan", imageRe5);
+          arrValues[4] = true;
+          isEverythingDownloaded();
         });
       }
 
       if (image6 !== null) {
+        arrValues.push(false);
         uploadBytes(imageRe6, image6).then(() => {
-          console.log("Upload uspesan", imageRe6);
+          arrValues[5] = true;
+          isEverythingDownloaded();
         });
       }
-    }
 
+      function isEverythingDownloaded() {
+        const allTrue = arrValues.every((element) => element === true);
+
+        if (allTrue) {
+          setTimeout(() => {
+            navigate("/" + collectionName + "/" + randomId);
+          }, "100");
+        }
+      }
+    }
     upLoadAllPic();
   };
 
-  function showConfirmation() {
-    setComp(
-      <>
-        <div className="confirmation">
-          <h2>potrvda</h2>
-          <div>
-            <h3>Ime</h3>
-            <p>{name}</p>
-          </div>
-          <div>
-            <h3>Cena</h3>
-            <p>{price}</p>
-          </div>
-          <div>
-            <button className="button-23" onClick={createItem}>
-              Add item
-            </button>
-          </div>
-        </div>
-      </>
-    );
+  function uploadProggres() {
+    createItem();
+    setComp(3);
   }
-  if (comp) {
+
+  function showConfirmation() {
+    setComp(1);
+  }
+
+  if (comp === 1) {
     return (
       <>
         <Container fluid>
@@ -214,12 +228,12 @@ function CreateItem() {
                       )}
                     </div>
                     <div>
-                      <button className="button-23" onClick={createItem}>
+                      <button className="button-23" onClick={uploadProggres}>
                         potvrdi
                       </button>
                       <button
                         onClick={() => {
-                          setComp(false);
+                          setComp(2);
                         }}
                         className="button-23"
                       >
@@ -240,7 +254,7 @@ function CreateItem() {
         <AdminNotFound />
       </>
     );
-  } else {
+  } else if (comp === 2) {
     return (
       <div>
         <div className="dropD">
@@ -436,7 +450,6 @@ function CreateItem() {
             </div>
           </Row>
         </Container>
-        {comp}
         <div className="centarItems butt1">
           <button className="button-23" onClick={showConfirmation}>
             Add item
@@ -444,8 +457,20 @@ function CreateItem() {
         </div>
       </div>
     );
+  } else if (comp === 3) {
+    return (
+      <>
+        <div className="loadingDiv1 centarItems">
+          <h2>uploading</h2>
+          <div class="lds-facebook">
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+      </>
+    );
   }
 }
 
 export default CreateItem;
-// da imam nacin da se vidi kada je upload gotov

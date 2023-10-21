@@ -25,6 +25,8 @@ function ClothingTyleFilter(props) {
   const [itemId, setItemID] = useState();
   const [items, setItems] = useState([]);
 
+  const [arrSort, setArrSort] = useState([]);
+
   // path
   let location = useLocation();
   const parts = location.pathname.split("/");
@@ -48,6 +50,8 @@ function ClothingTyleFilter(props) {
     if (itemId === undefined) {
       return;
     }
+
+    // first
     itemId.forEach((element) => {
       const getitem = async () => {
         // info from dataBase
@@ -56,6 +60,7 @@ function ClothingTyleFilter(props) {
 
         // storage
         const imageRef = ref(storage, `${props.items}/${element}`);
+        const itemFromdb = docSnap.data();
 
         if (docSnap.exists()) {
           listAll(imageRef)
@@ -68,11 +73,12 @@ function ClothingTyleFilter(props) {
                 }
               }
               const item1 = item();
-
               getDownloadURL(item1).then((url) => {
-                const itemFromdb = docSnap.data();
-                const { name, price } = itemFromdb;
-                setItems((prev) => [...prev, { name, price, url, element }]);
+                const { name, price, date } = itemFromdb;
+                setItems((prev) => [
+                  ...prev,
+                  { date, name, price, url, element },
+                ]);
               });
             })
             .catch((err) => console.log(err));
@@ -84,6 +90,31 @@ function ClothingTyleFilter(props) {
     });
   }, [itemId]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    function compareDates(a, b) {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+
+      if (dateA > dateB) {
+        return -1;
+      }
+      if (dateA < dateB) {
+        return 1;
+      }
+      return 0;
+    }
+
+    if (items === undefined) {
+      setArrSort(undefined);
+      return;
+    } else {
+      items.sort(compareDates);
+
+      console.log(items);
+      setArrSort(items);
+    }
+  }, [items]);
+
   return (
     <div>
       <div>
@@ -92,8 +123,8 @@ function ClothingTyleFilter(props) {
         <div className="itemsContainer">
           <Container fluid>
             <Row sm={12} md={2} lg={3} xl={4}>
-              {items ? (
-                items.map((obj) => (
+              {arrSort ? (
+                arrSort.map((obj) => (
                   <div className="boxItem" key={v4()}>
                     <Link
                       onClick={() => {
@@ -121,4 +152,3 @@ function ClothingTyleFilter(props) {
 }
 
 export default ClothingTyleFilter;
-// renderovanje po redosledu vreme dodato

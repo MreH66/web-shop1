@@ -15,6 +15,9 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Form from "react-bootstrap/Form";
+
 // Import Swiper styles
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Scrollbar } from "swiper/modules";
@@ -125,7 +128,7 @@ function Item(props) {
           const itemRef = ref(storage, url);
           deleteObject(itemRef)
             .then(() => {
-              navigate("/");
+              navigate("/lista/" + collection);
             })
             .catch((err) => console.log(err));
         });
@@ -193,38 +196,50 @@ function Item(props) {
                 </div>
               </div>
             ) : (
-              <>
+              <div className="azuriranjeDiv1">
                 <div>
-                  <label className="labelMain">Ime</label>
-                  <input
-                    value={name}
-                    type="string"
-                    placeholder="Name..."
-                    onChange={(event) => {
-                      setName(event.target.value);
-                    }}
-                  ></input>
-                  <label className="labelMain">cena</label>
-                  <input
-                    value={price}
-                    type="number"
-                    placeholder="Price..."
-                    onChange={(event) => {
-                      setPrice(event.target.value);
-                    }}
-                  ></input>
+                  <FloatingLabel
+                    controlId="floatingInput"
+                    label="Ime"
+                    className="mb-3"
+                  >
+                    <Form.Control
+                      value={name}
+                      style={{ height: "50px" }}
+                      className="floating111"
+                      type="string"
+                      placeholder="ime"
+                      onChange={(event) => {
+                        setName(event.target.value);
+                      }}
+                    />
+                  </FloatingLabel>
+
+                  <FloatingLabel controlId="Cena" label="Cena">
+                    <Form.Control
+                      value={price}
+                      style={{ height: "50px" }}
+                      className="floating111"
+                      onChange={(event) => {
+                        setPrice(event.target.value);
+                      }}
+                      type="number"
+                      placeholder="cena"
+                    />
+                  </FloatingLabel>
                 </div>
 
                 <div>
                   <p>Add info</p>
-                  <textarea
+
+                  <Form.Control
                     value={textInfo}
                     onChange={(event) => {
                       setTextInfo(event.target.value);
                     }}
-                    name="postContent"
-                    rows={4}
-                    cols={40}
+                    as="textarea"
+                    placeholder="info"
+                    style={{ height: "20vh" }}
                   />
                 </div>
 
@@ -270,12 +285,12 @@ function Item(props) {
                     Potvrdi
                   </button>
                 </div>
-              </>
+              </div>
             )}
 
             <div>
               {currenUser ? (
-                <div>
+                <div className="buttonUpdateDel">
                   <div className="buttonDiv">
                     <button
                       className="button-23"

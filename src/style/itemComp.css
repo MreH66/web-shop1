@@ -55,3 +55,14 @@
 .labelMain {
   display:block; 
 }
+
+.azuriranjeDiv1 {
+  width: 150%;
+  text-align: center;
+}
+
+.buttonUpdateDel {
+  width: 150%;
+  text-align: center;
+  margin-bottom: 5vh;
+}
