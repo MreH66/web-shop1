@@ -110,7 +110,8 @@ function CreateItem() {
       return;
     }
 
-    let textDate = new Date().toLocaleString();
+    // const date111 = new Date(year, monthIndex, day, hours, minutes, seconds);
+    let textDate = new Date().toLocaleString("YYYY/MM/dd");
 
     await setDoc(doc(itemCollectionRef, randomId), {
       name: name,
