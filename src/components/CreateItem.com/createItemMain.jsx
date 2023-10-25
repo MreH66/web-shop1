@@ -248,13 +248,13 @@ function CreateItem() {
         </Container>
       </>
     );
-  } else if (currenUser === null) {
+  } /*  else if (currenUser === null) {
     return (
       <>
         <AdminNotFound />
       </>
     );
-  } else if (comp === 2) {
+  } */ else if (comp === 2) {
     return (
       <div>
         <div className="dropD">

@@ -83,7 +83,10 @@ function Header() {
         <Link to="/">
           <h1 className="inlineD">Name</h1>
         </Link>
-        {isAdminLoggedIn()}
+        {/* {isAdminLoggedIn()} */}
+        <Link to="/CreateItems">
+          <h3 className="itemCreateLink">Create Item</h3>
+        </Link>
       </header>
     </div>
   );
