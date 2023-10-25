@@ -110,8 +110,29 @@ function CreateItem() {
       return;
     }
 
-    // const date111 = new Date(year, monthIndex, day, hours, minutes, seconds);
-    let textDate = new Date().toLocaleString("YYYY/MM/dd");
+    let date12 = new Date(
+      "year",
+      "monthIndex",
+      "day",
+      "hours",
+      "minutes",
+      "seconds"
+    );
+    const date = new Date();
+
+    const time111 =
+      date.getMonth() +
+      1 +
+      "/" +
+      date.getDate() +
+      "/" +
+      date.getFullYear() +
+      "," +
+      date.getHours() +
+      ":" +
+      date.getMinutes() +
+      ":" +
+      date.getSeconds();
 
     await setDoc(doc(itemCollectionRef, randomId), {
       name: name,
@@ -121,7 +142,7 @@ function CreateItem() {
       sizeL: sizeState3,
       sizeXL: sizeState4,
       info1: textInfo,
-      date: textDate,
+      date: time111,
     }).then(() => randomId);
 
     const imageRef = ref(storage, `${collectionName}/${randomId}/:0:${v4()}`);
