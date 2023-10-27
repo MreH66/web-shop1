@@ -113,14 +113,6 @@ p {
         }
 } 
 
-
-@media (max-width:410px) {
-
-    input {
-    width: 70%;
-    }
-} 
-
 @media (min-width:1150px) {
  .lista {
     position: relative;
@@ -148,14 +140,6 @@ padding-bottom: 10%;
 .butt1 {
     padding: 1%;
     padding-bottom: 5vh;
-}
-
-.inputFile {
-  
-}
-
-.lista {
- 
 }
 
 .lds-facebook {
@@ -203,3 +187,27 @@ padding-bottom: 10%;
     border-radius: 0% 0% 0% 0% / 0% 0% 0% 0% ;
     box-shadow: 10px 10px rgba(0,0,0,.15);
   }
+
+  @media only screen and (max-width: 390px) {
+    .lista {
+        position: relative;
+         right: 20%; 
+        float: left;
+     } 
+  }
+
+  @media only screen and (max-width: 355px) {
+    input {
+        width: 150%;
+        } 
+  }
+
+  .btn1122 {
+    background-color: #232D3F;
+    color: white;
+  }
+
+.btn1122:hover {
+    background-color:  #232D3F;
+    color: white;
+}

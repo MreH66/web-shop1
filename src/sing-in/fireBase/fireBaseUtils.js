@@ -1,5 +1,11 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signOut,
+} from "firebase/auth";
 
 import { getFirestore } from "@firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -27,3 +33,10 @@ export const singInWithGooglePopup = () => signInWithPopup(auth, provider);
 export const db = getFirestore(app);
 
 export const storage = getStorage(app);
+
+export const onAuthStateChangedListener = (callback) =>
+  onAuthStateChanged(auth, callback);
+
+export async function userSingOut() {
+  await signOut(auth);
+}

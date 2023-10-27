@@ -110,14 +110,6 @@ function CreateItem() {
       return;
     }
 
-    let date12 = new Date(
-      "year",
-      "monthIndex",
-      "day",
-      "hours",
-      "minutes",
-      "seconds"
-    );
     const date = new Date();
 
     const time111 =
@@ -270,18 +262,18 @@ function CreateItem() {
         </Container>
       </>
     );
-  } /*  else if (currenUser === null) {
+  } else if (currenUser === null) {
     return (
       <>
         <AdminNotFound />
       </>
     );
-  } */ else if (comp === 2) {
+  } else if (comp === 2) {
     return (
       <div>
         <div className="dropD">
           <MDBDropdown>
-            <MDBDropdownToggle tag="a" className="btn btn-primary">
+            <MDBDropdownToggle tag="a" className="btn btn1122">
               trenutna kolekcija ={collectionName}
             </MDBDropdownToggle>
             <MDBDropdownMenu>
@@ -312,7 +304,6 @@ function CreateItem() {
             </MDBDropdownMenu>
           </MDBDropdown>
         </div>
-
         <Container fluid>
           <Row sm={1} md={1} lg={2} xl={2}>
             <div className="inputsBox centarItems">

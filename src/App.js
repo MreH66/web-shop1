@@ -100,7 +100,7 @@ function App() {
                         handleClick(1);
                       }}
                     >
-                      <GenderS gender="Accessories" picture={malePic} />
+                      <GenderS gender="1" picture={malePic} />
                     </div>
                   </Col>
                   <Col>
@@ -110,7 +110,7 @@ function App() {
                         handleClick(2);
                       }}
                     >
-                      <GenderS gender="Zene" picture={femalePic} />
+                      <GenderS gender="2" picture={femalePic} />
                     </div>
                   </Col>
                 </Row>

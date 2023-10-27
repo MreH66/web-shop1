@@ -1,11 +1,13 @@
 import "../../style/header.css";
 import icon1 from "../../images/settings-line.png";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import {
   db,
   singInWithGooglePopup,
+  onAuthStateChangedListener,
+  userSingOut,
 } from "../../sing-in/fireBase/fireBaseUtils";
 
 import { UserContext } from "../Context/user.contest";
@@ -16,7 +18,7 @@ function Header() {
   const { currenUser, setCurrentUser } = useContext(UserContext);
 
   async function getAdminUser() {
-    const itemRef = doc(db, "AdminID", "eMOGiGlPfpb2NcTYXJb5r5aIDAx1"); // od uuid-a moram da napravim hash
+    const itemRef = doc(db, "AdminID", "eMOGiGlPfpb2NcTYXJb5r5aIDAx1");
     const AdminID = await getDoc(itemRef);
     // console.log(AdminID.id);
     return AdminID.id;
@@ -60,6 +62,14 @@ function Header() {
     setOptions(!options);
   }
 
+  useEffect(() => {
+    const unsubcribe = onAuthStateChangedListener((user) => {
+      setCurrentUser(user);
+    });
+
+    return unsubcribe;
+  }, []);
+
   return (
     <div>
       <header>
@@ -70,7 +80,17 @@ function Header() {
           onClick={displayHandler}
         />
 
-        {options ? (
+        {currenUser ? (
+          options ? (
+            <>
+              <button onClick={userSingOut} className="optionsP">
+                <p className="LoginText">logout</p>
+              </button>
+            </>
+          ) : (
+            <></>
+          )
+        ) : options ? (
           <>
             <button onClick={logGoogleUser} className="optionsP">
               <p className="LoginText">Login</p>
@@ -83,10 +103,7 @@ function Header() {
         <Link to="/">
           <h1 className="inlineD">Name</h1>
         </Link>
-        {/* {isAdminLoggedIn()} */}
-        <Link to="/CreateItems">
-          <h3 className="itemCreateLink">Create Item</h3>
-        </Link>
+        {isAdminLoggedIn()}
       </header>
     </div>
   );
