@@ -17,6 +17,15 @@ import { getDoc, doc } from "firebase/firestore";
 function Header() {
   const { currenUser, setCurrentUser } = useContext(UserContext);
 
+  useEffect(() => {
+    function chechIfUser() {
+      if (currenUser !== null) {
+        setCurrentUser(true);
+      }
+    }
+    chechIfUser();
+  }, [currenUser]);
+
   async function getAdminUser() {
     const itemRef = doc(db, "AdminID", "eMOGiGlPfpb2NcTYXJb5r5aIDAx1");
     const AdminID = await getDoc(itemRef);

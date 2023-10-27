@@ -149,7 +149,14 @@ function Item(props) {
       info1: textInfo,
     };
 
-    await updateDoc(itemDoc, newFields).then(navigate(0)); // timer i neka animcaija na dugmetu
+    await updateDoc(itemDoc, newFields)
+      .then(alert("update successful"))
+      .then(
+        setTimeout(() => {
+          navigate(0);
+        }, 500)
+      )
+      .catch((err) => console.log(err)); // timer i neka animcaija na dugmetu
   }
 
   if (mainItem) {
