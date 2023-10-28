@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 // comp
 import ItemSize from "./smallComp/ItemCizeComp";
-import TypeOftclohingErr from "./errorNotfound/typeOfClothingErr";
+import ErrorPage from "./errorNotfound/ErrPage";
 
 // Bootstrap
 import Container from "react-bootstrap/Container";
@@ -82,6 +82,7 @@ function Item(props) {
 
       // setters
       setName(name);
+      // format
       setPrice(price);
       setTextInfo(info1);
 
@@ -328,7 +329,7 @@ function Item(props) {
   } else if (mainItem === false) {
     return (
       <>
-        <TypeOftclohingErr />
+        <ErrorPage type="ItemNotFound" />
       </>
     );
   }

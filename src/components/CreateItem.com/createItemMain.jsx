@@ -31,9 +31,8 @@ import { ref, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";
 
 import ItemSize from "../smallComp/ItemCizeComp";
-import AdminNotFound from "../errorNotfound/adminNotFound";
+import ErrorPage from "../errorNotfound/ErrPage";
 import { UserContext } from "../Context/user.contest";
-import { Prev } from "react-bootstrap/esm/PageItem";
 
 function CreateItem() {
   // info item
@@ -76,10 +75,6 @@ function CreateItem() {
     setRandomId(v4().toString().replaceAll("-", ""));
   }, []);
 
-  useEffect(() => {
-    // console.log(randomId);
-  }, [randomId]);
-
   function sizeState(size) {
     switch (size) {
       case 1:
@@ -107,12 +102,30 @@ function CreateItem() {
     if (name === "" || image1 === null || price === null) {
       alert("jedno od polja je prazno");
       setComp(2);
+
+      setName("");
+      setPrice(null);
+      setTextInfo("");
+      setSizeState1(false);
+      setSizeState2(false);
+      setSizeState3(false);
+      setSizeState4(false);
+
+      setImage1(null);
+      setImage2(null);
+      setImage3(null);
+      setImage4(null);
+      setImage5(null);
+      setImage6(null);
+
       return;
     }
 
+    uploadProggres();
+
     const date = new Date();
 
-    const time111 =
+    const time1 =
       date.getMonth() +
       1 +
       "/" +
@@ -134,7 +147,7 @@ function CreateItem() {
       sizeL: sizeState3,
       sizeXL: sizeState4,
       info1: textInfo,
-      date: time111,
+      date: time1,
     }).then(() => randomId);
 
     const imageRef = ref(storage, `${collectionName}/${randomId}/:0:${v4()}`);
@@ -207,7 +220,6 @@ function CreateItem() {
   };
 
   function uploadProggres() {
-    createItem();
     setComp(3);
   }
 
@@ -231,7 +243,6 @@ function CreateItem() {
                       ) : (
                         <h2>{name}</h2>
                       )}
-                      <h2>{name}</h2>
                     </div>
                     <div>
                       <h3 className="text1111">Cena</h3>
@@ -242,16 +253,8 @@ function CreateItem() {
                       )}
                     </div>
                     <div>
-                      <button className="button-23" onClick={uploadProggres}>
+                      <button className="button-23" onClick={createItem}>
                         potvrdi
-                      </button>
-                      <button
-                        onClick={() => {
-                          setComp(2);
-                        }}
-                        className="button-23"
-                      >
-                        Nazad
                       </button>
                     </div>
                   </div>
@@ -265,7 +268,7 @@ function CreateItem() {
   } else if (currenUser === null) {
     return (
       <>
-        <AdminNotFound />
+        <ErrorPage type="Admin" />
       </>
     );
   } else if (comp === 2) {
@@ -314,6 +317,7 @@ function CreateItem() {
                     <input
                       className="inputFile"
                       type="file"
+                      name="nesto"
                       onChange={(event) => {
                         setImage1(event.target.files[0]);
                       }}

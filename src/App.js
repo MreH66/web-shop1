@@ -12,7 +12,7 @@ import Col from "react-bootstrap/Col";
 import Header from "./components/MainComp/header";
 import GenderS from "./components/smallComp/genderS";
 import CreateItem from "./components/CreateItem.com/createItemMain";
-import TypeOftclohingErr from "./components/errorNotfound/typeOfClothingErr";
+import ErrorPage from "./components/errorNotfound/ErrPage";
 
 // import Footer1 from "./components/footer";
 import InfoText from "./components/MainComp/info";
@@ -78,9 +78,10 @@ function App() {
     } else if (firstPartUrl !== "lista") {
       setRouteLink(firstPartUrl);
       setItemName(lastUrlPart);
-    } else {
-      setErrRoute(<Route path="*" element={<TypeOftclohingErr />} />);
     }
+    setTimeout(() => {
+      setErrRoute(<Route path="*" element={<ErrorPage type="mainErr" />} />);
+    }, 500);
   }, [location]);
 
   return (

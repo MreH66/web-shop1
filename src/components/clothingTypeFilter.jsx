@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { v4 } from "uuid";
 // imports
 import ClothingItem from "./smallComp/clothingItems";
-import TypeOftclohingErr from "./errorNotfound/typeOfClothingErr";
+import ErrorPage from "./errorNotfound/ErrPage";
 
 // bootstrap
 import Container from "react-bootstrap/Container";
@@ -109,8 +109,6 @@ function ClothingTyleFilter(props) {
       return;
     } else {
       items.sort(compareDates);
-
-      console.log(items);
       setArrSort(items);
     }
   }, [items]);
@@ -141,7 +139,7 @@ function ClothingTyleFilter(props) {
                   </div>
                 ))
               ) : (
-                <TypeOftclohingErr />
+                <ErrorPage type="ListOfItems" />
               )}
             </Row>
           </Container>
