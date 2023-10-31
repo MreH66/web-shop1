@@ -1,6 +1,7 @@
 import "../../style/createItemCSS/createItem.css";
 
 import { useContext, useEffect, useState } from "react";
+import React from "react";
 
 // router
 import { useNavigate } from "react-router-dom";
@@ -8,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 //Bootstrap
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
@@ -56,18 +56,18 @@ function CreateItem() {
   const [randomId, setRandomId] = useState(null);
 
   //image
-  const [image1, setImage1] = useState(null);
-  const [image2, setImage2] = useState(null);
-  const [image3, setImage3] = useState(null);
-  const [image4, setImage4] = useState(null);
-  const [image5, setImage5] = useState(null);
-  const [image6, setImage6] = useState(null);
+  const [image1, setImage1] = useState(undefined);
+  const [image2, setImage2] = useState(undefined);
+  const [image3, setImage3] = useState(undefined);
+  const [image4, setImage4] = useState(undefined);
+  const [image5, setImage5] = useState(undefined);
+  const [image6, setImage6] = useState(undefined);
 
   //ConfiramtionScreen
   const [comp, setComp] = useState(2);
 
   // setter if all images are uploaded
-  const arrValues = [];
+  const arrValues = [false, false, false, false, false, false];
 
   const navigate = useNavigate();
 
@@ -101,23 +101,6 @@ function CreateItem() {
   const createItem = async () => {
     if (name === "" || image1 === null || price === null) {
       alert("jedno od polja je prazno");
-      setComp(2);
-
-      setName("");
-      setPrice(null);
-      setTextInfo("");
-      setSizeState1(false);
-      setSizeState2(false);
-      setSizeState3(false);
-      setSizeState4(false);
-
-      setImage1(null);
-      setImage2(null);
-      setImage3(null);
-      setImage4(null);
-      setImage5(null);
-      setImage6(null);
-
       return;
     }
 
@@ -150,65 +133,72 @@ function CreateItem() {
       date: time1,
     }).then(() => randomId);
 
-    const imageRef = ref(storage, `${collectionName}/${randomId}/:0:${v4()}`);
-    const imageRe2 = ref(storage, `${collectionName}/${randomId}/:1:${v4()}`);
-    const imageRe3 = ref(storage, `${collectionName}/${randomId}/:2:${v4()}`);
-    const imageRe4 = ref(storage, `${collectionName}/${randomId}/:3:${v4()}`);
-    const imageRe5 = ref(storage, `${collectionName}/${randomId}/:4:${v4()}`);
-    const imageRe6 = ref(storage, `${collectionName}/${randomId}/:5:${v4()}`);
-
     function upLoadAllPic() {
-      if (image1 !== null) {
-        arrValues.push(false);
+      const imageRef = ref(storage, `${collectionName}/${randomId}/:0:${v4()}`);
+      const imageRe2 = ref(storage, `${collectionName}/${randomId}/:1:${v4()}`);
+      const imageRe3 = ref(storage, `${collectionName}/${randomId}/:2:${v4()}`);
+      const imageRe4 = ref(storage, `${collectionName}/${randomId}/:3:${v4()}`);
+      const imageRe5 = ref(storage, `${collectionName}/${randomId}/:4:${v4()}`);
+      const imageRe6 = ref(storage, `${collectionName}/${randomId}/:5:${v4()}`);
+
+      if (image1 !== undefined) {
         uploadBytes(imageRef, image1).then(() => {
           arrValues[0] = true;
           isEverythingDownloaded();
         });
+      } else {
+        arrValues[0] = true;
       }
 
-      if (image2 !== null) {
-        arrValues.push(false);
+      if (image2 !== undefined) {
         uploadBytes(imageRe2, image2).then(() => {
           arrValues[1] = true;
           isEverythingDownloaded();
         });
+      } else {
+        arrValues[1] = true;
       }
 
-      if (image3 !== null) {
-        arrValues.push(false);
+      if (image3 !== undefined) {
         uploadBytes(imageRe3, image3).then(() => {
           arrValues[2] = true;
           isEverythingDownloaded();
         });
+      } else {
+        arrValues[2] = true;
       }
 
-      if (image4 !== null) {
-        arrValues.push(false);
+      if (image4 !== undefined) {
         uploadBytes(imageRe4, image4).then(() => {
           arrValues[3] = true;
           isEverythingDownloaded();
         });
+      } else {
+        arrValues[3] = true;
       }
 
-      if (image5 !== null) {
-        arrValues.push(false);
+      if (image5 !== undefined) {
         uploadBytes(imageRe5, image5).then(() => {
           arrValues[4] = true;
           isEverythingDownloaded();
         });
+      } else {
+        arrValues[4] = true;
       }
 
-      if (image6 !== null) {
-        arrValues.push(false);
+      if (image6 !== undefined) {
         uploadBytes(imageRe6, image6).then(() => {
           arrValues[5] = true;
           isEverythingDownloaded();
         });
+      } else {
+        arrValues[5] = true;
       }
 
       function isEverythingDownloaded() {
+        console.log(arrValues);
         const allTrue = arrValues.every((element) => element === true);
-
+        console.log(image3);
         if (allTrue) {
           setTimeout(() => {
             navigate("/" + collectionName + "/" + randomId);
@@ -223,49 +213,59 @@ function CreateItem() {
     setComp(3);
   }
 
-  function showConfirmation() {
-    setComp(1);
+  let [addImg, setAddImg] = useState([]);
+  let [numImg, setNumImg] = useState(1);
+
+  function AddPic() {
+    setNumImg(numImg + 1);
+    setAddImg((prev) => [
+      ...prev,
+      <div>
+        <input
+          id={numImg}
+          className="inputFile"
+          type="file"
+          onChange={(event) => {
+            setImg(event.target.files[0], event.currentTarget.id);
+          }}
+        />
+      </div>,
+    ]);
   }
 
-  if (comp === 1) {
-    return (
-      <>
-        <Container fluid>
-          <Row>
-            <Col>
-              <div class="containerCreateItem">
-                <div class="plate">
-                  <div className="confirmation">
-                    <div>
-                      <h3 className="text1111">Ime</h3>
-                      {name === "" ? (
-                        <h2>ime nije upisano</h2>
-                      ) : (
-                        <h2>{name}</h2>
-                      )}
-                    </div>
-                    <div>
-                      <h3 className="text1111">Cena</h3>
-                      {price === null ? (
-                        <h2>cena nije upisana</h2>
-                      ) : (
-                        <h2>{price}.00 Din</h2>
-                      )}
-                    </div>
-                    <div>
-                      <button className="button-23" onClick={createItem}>
-                        potvrdi
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Col>
-          </Row>
-        </Container>
-      </>
-    );
-  } else if (currenUser === null) {
+  function setImg(img, idFromButton) {
+    switch (Number(idFromButton)) {
+      case 1:
+        console.log("pic 1 ready and waiting for upload");
+        setImage2(img);
+        break;
+
+      case 2:
+        console.log("pic 2 ready and waiting for upload");
+        setImage3(img);
+        break;
+
+      case 3:
+        console.log("pic 3 ready and waiting for upload");
+        setImage4(img);
+        break;
+
+      case 4:
+        console.log("pic 4 ready and waiting for upload");
+        setImage5(img);
+        break;
+
+      case 5:
+        console.log("pic 5 ready and waiting for upload");
+        setImage6(img);
+        break;
+
+      default:
+        console.log("img not found");
+    }
+  }
+
+  if (currenUser === null) {
     return (
       <>
         <ErrorPage type="Admin" />
@@ -317,7 +317,6 @@ function CreateItem() {
                     <input
                       className="inputFile"
                       type="file"
-                      name="nesto"
                       onChange={(event) => {
                         setImage1(event.target.files[0]);
                       }}
@@ -325,61 +324,14 @@ function CreateItem() {
                     <br />
                   </div>
                 </li>
-                <li>
-                  <div>
-                    <input
-                      className="inputFile"
-                      type="file"
-                      onChange={(event) => {
-                        setImage2(event.target.files[0]);
-                      }}
-                    />
-                  </div>
-                </li>
-                <li>
-                  <div>
-                    <input
-                      className="inputFile"
-                      type="file"
-                      onChange={(event) => {
-                        setImage3(event.target.files[0]);
-                      }}
-                    />
-                  </div>
-                </li>
-                <li>
-                  <div>
-                    <input
-                      className="inputFile"
-                      type="file"
-                      onChange={(event) => {
-                        setImage4(event.target.files[0]);
-                      }}
-                    />
-                  </div>
-                </li>
-                <li>
-                  <div>
-                    <input
-                      className="inputFile"
-                      type="file"
-                      onChange={(event) => {
-                        setImage5(event.target.files[0]);
-                      }}
-                    />
-                  </div>
-                </li>
-                <li>
-                  <div>
-                    <input
-                      className="inputFile"
-                      type="file"
-                      onChange={(event) => {
-                        setImage6(event.target.files[0]);
-                      }}
-                    />
-                  </div>
-                </li>
+                <div>
+                  {addImg.map((Item) => {
+                    return <li>{Item}</li>;
+                  })}
+                  <button className="button-23" onClick={AddPic}>
+                    Add picture
+                  </button>
+                </div>
               </ol>
             </div>
             <div>
@@ -414,7 +366,7 @@ function CreateItem() {
                 </>
 
                 <div className="textAr">
-                  <FloatingLabel controlId="floatingTextarea2" label="Comments">
+                  <FloatingLabel controlId="floatingTextarea2" label="Komentar">
                     <Form.Control
                       onChange={(event) => {
                         setTextInfo(event.target.value);
@@ -468,7 +420,7 @@ function CreateItem() {
           </Row>
         </Container>
         <div className="centarItems butt1">
-          <button className="button-23" onClick={showConfirmation}>
+          <button className="button-23" onClick={createItem}>
             Add item
           </button>
         </div>
@@ -479,7 +431,7 @@ function CreateItem() {
       <>
         <div className="loadingDiv1 centarItems">
           <h2>uploading</h2>
-          <div class="lds-facebook">
+          <div className="lds-facebook">
             <div></div>
             <div></div>
             <div></div>

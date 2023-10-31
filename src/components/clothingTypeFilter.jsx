@@ -113,6 +113,7 @@ function ClothingTyleFilter(props) {
     }
   }, [items]);
 
+  
   return (
     <div>
       <div>

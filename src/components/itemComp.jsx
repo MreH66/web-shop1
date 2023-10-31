@@ -45,6 +45,8 @@ function Item(props) {
 
   const [imagelist, setImagelist] = useState([]);
 
+  const [arrayLen, setArrLen] = useState();
+
   const [listUpDate, setListUpDate] = useState(true);
 
   // state Info upDate
@@ -58,7 +60,7 @@ function Item(props) {
   const [sizeState4, setSizeState4] = useState(false);
 
   const [ArrImg, setArrImg] = useState([]);
-  const [numberChange1, setNumberChnage1] = useState(0);
+  let [numberChange1, setNumberChnage1] = useState(0);
 
   // Context
   const { currenUser } = useContext(UserContext);
@@ -96,8 +98,10 @@ function Item(props) {
   useEffect(() => {
     const imageRef = ref(storage, `${props.clothingType}/${props.itemId}`);
     listAll(imageRef).then((res) => {
+      setArrLen(res.items.length);
       res.items.forEach((item) => {
         getDownloadURL(item).then((url) => {
+          // console.log(url);
           setImagelist((prev) => [...prev, url]);
         });
       });
@@ -157,7 +161,7 @@ function Item(props) {
           navigate(0);
         }, 500)
       )
-      .catch((err) => console.log(err)); // timer i neka animcaija na dugmetu
+      .catch((err) => console.log(err));
   }
 
   if (mainItem) {
