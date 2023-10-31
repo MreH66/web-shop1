@@ -110,13 +110,29 @@ function Item(props) {
 
   useEffect(() => {
     imagelist.forEach((item) => {
-      if (item.includes(`%3A${numberChange1}%`)) {
-        if (numberChange1 !== imagelist.length) {
-          setNumberChnage1(numberChange1 + 1);
-        }
-        setArrImg((prev) => [...prev, item]);
-      }
+      repeat(item);
     });
+
+    function repeat(item) {
+      // ako artikl koji je unutar item ne postoji jos uvek u arr dodaj
+      if (!ArrImg.includes(item)) {
+        console.log(item);
+
+        function rep() {
+          if (item.includes(`%3A${numberChange1}%`)) {
+            console.log(numberChange1);
+
+            setArrImg((prev) => [...prev, item]);
+          } else {
+            if (numberChange1 !== 10) {
+              setNumberChnage1(numberChange1 + 1);
+            }
+          }
+        }
+
+        rep();
+      }
+    }
   }, [imagelist, numberChange1]);
 
   // itame Delete
