@@ -39,19 +39,18 @@ import {
 import { getDownloadURL, listAll, ref, deleteObject } from "firebase/storage";
 
 import { UserContext } from "./Context/user.contest";
+import { v4 } from "uuid";
 
 function Item(props) {
   const [mainItem, setFillterdArr] = useState();
 
   const [imagelist, setImagelist] = useState([]);
 
-  const [arrayLen, setArrLen] = useState();
-
   const [listUpDate, setListUpDate] = useState(true);
 
   // state Info upDate
   const [name, setName] = useState("");
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState("");
   const [textInfo, setTextInfo] = useState("");
   // sizeState
   const [sizeState1, setSizeState1] = useState(false);
@@ -84,8 +83,7 @@ function Item(props) {
 
       // setters
       setName(name);
-      // format
-      setPrice(price);
+      setPrice(new Intl.NumberFormat("en-DE").format(price));
       setTextInfo(info1);
 
       //
@@ -98,30 +96,28 @@ function Item(props) {
   useEffect(() => {
     const imageRef = ref(storage, `${props.clothingType}/${props.itemId}`);
     listAll(imageRef).then((res) => {
-      setArrLen(res.items.length);
+      setState1(res.items.length);
       res.items.forEach((item) => {
         getDownloadURL(item).then((url) => {
-          // console.log(url);
           setImagelist((prev) => [...prev, url]);
         });
       });
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  let [state1, setState1] = useState(null);
+
   useEffect(() => {
-    imagelist.forEach((item) => {
-      repeat(item);
-    });
+    if (imagelist.length === state1) {
+      imagelist.forEach((item) => {
+        repeat(item);
+      });
+    }
 
     function repeat(item) {
-      // ako artikl koji je unutar item ne postoji jos uvek u arr dodaj
       if (!ArrImg.includes(item)) {
-        console.log(item);
-
         function rep() {
           if (item.includes(`%3A${numberChange1}%`)) {
-            console.log(numberChange1);
-
             setArrImg((prev) => [...prev, item]);
           } else {
             if (numberChange1 !== 10) {
@@ -197,7 +193,7 @@ function Item(props) {
               >
                 {ArrImg.map((url) => {
                   return (
-                    <SwiperSlide key={Math.random()}>
+                    <SwiperSlide key={v4()}>
                       <img className="Img" src={url} alt="picMain"></img>
                     </SwiperSlide>
                   );
@@ -209,11 +205,11 @@ function Item(props) {
             {listUpDate ? (
               <div>
                 <div className="mainInfoDiv">
-                  <h2 className="middle1">{mainItem.name}</h2>
-                  <h2 className="middle1">{mainItem.price}.00 din</h2>
+                  <h2 className="middle1">{name}</h2>
+                  <h2 className="middle1">{price} din</h2>
                 </div>
                 <div className="moreInfo">
-                  <p>{mainItem.info1}</p>
+                  <p>{textInfo}</p>
                 </div>
 
                 <div className="sizeValueDiv">

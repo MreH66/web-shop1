@@ -66,6 +66,8 @@ function CreateItem() {
   //ConfiramtionScreen
   const [comp, setComp] = useState(2);
 
+  const [buttonImg, setButtonImg] = useState("Add image");
+
   // setter if all images are uploaded
   const arrValues = [false, false, false, false, false, false];
 
@@ -196,9 +198,8 @@ function CreateItem() {
       }
 
       function isEverythingDownloaded() {
-        console.log(arrValues);
         const allTrue = arrValues.every((element) => element === true);
-        console.log(image3);
+
         if (allTrue) {
           setTimeout(() => {
             navigate("/" + collectionName + "/" + randomId);
@@ -216,8 +217,19 @@ function CreateItem() {
   let [addImg, setAddImg] = useState([]);
   let [numImg, setNumImg] = useState(1);
 
+  useEffect(() => {
+    if (numImg === 10) {
+      setButtonImg("Image limit reached");
+    }
+  }, [numImg]);
+
   function AddPic() {
     setNumImg(numImg + 1);
+
+    if (numImg > 9) {
+      return;
+    }
+
     setAddImg((prev) => [
       ...prev,
       <div>
@@ -236,27 +248,22 @@ function CreateItem() {
   function setImg(img, idFromButton) {
     switch (Number(idFromButton)) {
       case 1:
-        console.log("pic 1 ready and waiting for upload");
         setImage2(img);
         break;
 
       case 2:
-        console.log("pic 2 ready and waiting for upload");
         setImage3(img);
         break;
 
       case 3:
-        console.log("pic 3 ready and waiting for upload");
         setImage4(img);
         break;
 
       case 4:
-        console.log("pic 4 ready and waiting for upload");
         setImage5(img);
         break;
 
       case 5:
-        console.log("pic 5 ready and waiting for upload");
         setImage6(img);
         break;
 
@@ -329,7 +336,7 @@ function CreateItem() {
                     return <li>{Item}</li>;
                   })}
                   <button className="button-23" onClick={AddPic}>
-                    Add picture
+                    {buttonImg}
                   </button>
                 </div>
               </ol>
