@@ -335,12 +335,15 @@ function CreateItem() {
                   {addImg.map((Item) => {
                     return <li>{Item}</li>;
                   })}
+                </div>
+                <div className="centarItems centarButton ">
                   <button className="button-23" onClick={AddPic}>
                     {buttonImg}
                   </button>
                 </div>
               </ol>
             </div>
+
             <div>
               <div className="allInfoDiv centarItems">
                 <>

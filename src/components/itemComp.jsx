@@ -83,7 +83,7 @@ function Item(props) {
 
       // setters
       setName(name);
-      setPrice(new Intl.NumberFormat("en-DE").format(price));
+      setPrice(price);
       setTextInfo(info1);
 
       //
@@ -129,7 +129,7 @@ function Item(props) {
         rep();
       }
     }
-  }, [imagelist, numberChange1]);
+  }, [imagelist, numberChange1]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // itame Delete
   async function deleteItem(collection, id) {
@@ -206,7 +206,9 @@ function Item(props) {
               <div>
                 <div className="mainInfoDiv">
                   <h2 className="middle1">{name}</h2>
-                  <h2 className="middle1">{price} din</h2>
+                  <h2 className="middle1">
+                    {new Intl.NumberFormat("en-DE").format(price)} din
+                  </h2>
                 </div>
                 <div className="moreInfo">
                   <p>{textInfo}</p>
