@@ -27,6 +27,8 @@ function ClothingTyleFilter(props) {
 
   const [arrSort, setArrSort] = useState([]);
 
+  const [stateRun1, setStateRun1] = useState();
+
   // path
   let location = useLocation();
   const parts = location.pathname.split("/");
@@ -51,13 +53,14 @@ function ClothingTyleFilter(props) {
       return;
     }
 
+    setStateRun1(itemId.length);
+
     // first
     itemId.forEach((element) => {
       const getitem = async () => {
         // info from dataBase
         const itemRef = doc(db, props.items, element);
         const docSnap = await getDoc(itemRef);
-
         // storage
         const imageRef = ref(storage, `${props.items}/${element}`);
         const itemFromdb = docSnap.data();
@@ -91,34 +94,37 @@ function ClothingTyleFilter(props) {
   }, [itemId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    function compareDates(a, b) {
-      const dateA = new Date(a.date);
-      const dateB = new Date(b.date);
+    if (stateRun1 === items.length) {
+      function compareDates(a, b) {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
 
-      if (dateA > dateB) {
-        return -1;
+        if (dateA > dateB) {
+          return -1;
+        }
+        if (dateA < dateB) {
+          return 1;
+        }
+        return 0;
       }
-      if (dateA < dateB) {
-        return 1;
+
+      if (items === undefined) {
+        setArrSort(undefined);
+        return;
+      } else {
+        items.sort(compareDates);
+        setArrSort(items);
       }
-      return 0;
     }
 
-    if (items === undefined) {
-      setArrSort(undefined);
-      return;
-    } else {
-      items.sort(compareDates);
-      setArrSort(items);
-    }
-  }, [items]);
+    /* if (stateRun1 === itemId.length) {
+    } */
+  }, [items]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  
   return (
     <div>
       <div>
         <h2 className="mainItemName">{props.items}</h2>
-
         <div className="itemsContainer">
           <Container fluid>
             <Row sm={12} md={2} lg={3} xl={4}>
