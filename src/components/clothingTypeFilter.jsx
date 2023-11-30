@@ -23,7 +23,8 @@ import { getDownloadURL, listAll, ref } from "firebase/storage";
 
 function ClothingTyleFilter(props) {
   const [itemId, setItemID] = useState();
-  const [items, setItems] = useState([]);
+  
+  const [item1, setItem1] = useState([]);
 
   const [arrSort, setArrSort] = useState([]);
 
@@ -41,7 +42,7 @@ function ClothingTyleFilter(props) {
       const data = await getDocs(itemCollection);
       const finalDataID = data.docs.map((doc) => doc.id);
       if (finalDataID.length === 0) {
-        setItems(undefined);
+        setArrSort(undefined);
       }
       setItemID(finalDataID);
     };
@@ -55,13 +56,11 @@ function ClothingTyleFilter(props) {
 
     setStateRun1(itemId.length);
 
-    // first
     itemId.forEach((element) => {
       const getitem = async () => {
-        // info from dataBase
         const itemRef = doc(db, props.items, element);
         const docSnap = await getDoc(itemRef);
-        // storage
+
         const imageRef = ref(storage, `${props.items}/${element}`);
         const itemFromdb = docSnap.data();
 
@@ -78,7 +77,7 @@ function ClothingTyleFilter(props) {
               const item1 = item();
               getDownloadURL(item1).then((url) => {
                 const { name, price, date } = itemFromdb;
-                setItems((prev) => [
+                setItem1((prev) => [
                   ...prev,
                   { date, name, price, url, element },
                 ]);
@@ -94,7 +93,7 @@ function ClothingTyleFilter(props) {
   }, [itemId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (stateRun1 === items.length) {
+    if (stateRun1 === item1.length) {
       function compareDates(a, b) {
         const dateA = new Date(a.date);
         const dateB = new Date(b.date);
@@ -108,18 +107,15 @@ function ClothingTyleFilter(props) {
         return 0;
       }
 
-      if (items === undefined) {
+      if (item1 === undefined) {
         setArrSort(undefined);
         return;
       } else {
-        items.sort(compareDates);
-        setArrSort(items);
+        item1.sort(compareDates);
+        setArrSort(item1);
       }
     }
-
-    /* if (stateRun1 === itemId.length) {
-    } */
-  }, [items]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [item1]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>

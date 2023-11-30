@@ -101,7 +101,7 @@ function CreateItem() {
   const itemCollectionRef = collection(db, collectionName);
 
   const createItem = async () => {
-    if (name === "" || image1 === null || price === null) {
+    if (name === "" || image1 === undefined || price === null) {
       alert("jedno od polja je prazno");
       return;
     }

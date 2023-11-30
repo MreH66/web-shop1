@@ -194,7 +194,12 @@ function Item(props) {
                 {ArrImg.map((url) => {
                   return (
                     <SwiperSlide key={v4()}>
-                      <img className="Img" src={url} alt="picMain"></img>
+                      <img
+                        key={v4()}
+                        className="Img"
+                        src={url}
+                        alt="picMain"
+                      ></img>
                     </SwiperSlide>
                   );
                 })}
