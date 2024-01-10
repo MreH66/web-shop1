@@ -2,7 +2,7 @@ import "./style/app.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 // react router
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 // Bootstrap
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -20,20 +20,19 @@ import ClothingTyleFilter from "./components/clothingTypeFilter";
 import Item from "./components/itemComp";
 // windows
 import Window1 from "./components/window1";
-import Window2 from "./components/window2";
 
 //pictures
 import malePic from "./images/article_aligned@2x.jpg";
 import femalePic from "./images/photoFemale.jpeg";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+
+const ArrayOfClothing1 = ["haljina", "pantalone", "suknja", "stikle", "dodaci"];
+const ArrayOfClothing2 = ["jakna", "jakna", "jakna", "jakna", "jakna", "jakna"];
 
 function App() {
-  const [viewComp1] = useState(<Window1 fun1={selectClothingRout} />);
-  const [viewComp2] = useState(<Window2 fun1={selectClothingRout} />);
+  const [viewComp1] = useState(<Window1 items={ArrayOfClothing1} />);
+  const [viewComp2] = useState(<Window1 items={ArrayOfClothing2} />);
   const [viewComp3, setViewComp3] = useState(<InfoText />);
-
-  //err
-  const [errRoute, setErrRoute] = useState(<></>);
 
   function handleClick(num) {
     switch (num) {
@@ -50,39 +49,9 @@ function App() {
         }
         break;
       default:
-        console.log("number not found");
-        break;
+        return;
     }
   }
-
-  let location = useLocation();
-
-  const [routeLink, setRouteLink] = useState("/");
-  const [ItemName, setItemName] = useState();
-
-  function selectClothingRout(nameOfItems) {
-    setRouteLink("/" + nameOfItems);
-    setItemName(nameOfItems);
-  }
-
-  useEffect(() => {
-    const parts = location.pathname.split("/");
-    const lastUrlPart = parts.at(-1);
-
-    const parts1 = location.pathname.split("/");
-    const firstPartUrl = parts1.at(1);
-
-    if (firstPartUrl === "lista") {
-      setRouteLink(lastUrlPart);
-      setItemName(lastUrlPart);
-    } else if (firstPartUrl !== "lista") {
-      setRouteLink(firstPartUrl);
-      setItemName(lastUrlPart);
-    }
-    setTimeout(() => {
-      setErrRoute(<Route path="*" element={<ErrorPage type="mainErr" />} />);
-    }, 500);
-  }, [location]);
 
   return (
     <div className="backG-Color">
@@ -122,22 +91,16 @@ function App() {
         ></Route>
         <Route
           exact
-          path={"/lista/" + routeLink}
+          path={"/lista/:routeLink"}
           element={
             <div>
-              <ClothingTyleFilter
-                functionGetRoute={selectClothingRout}
-                items={ItemName}
-              />
+              <ClothingTyleFilter />
             </div>
           }
         ></Route>
-        <Route
-          path={"/" + routeLink + "/" + ItemName}
-          element={<Item itemId={ItemName} clothingType={routeLink}></Item>}
-        ></Route>
+        <Route path={"/:routeLink/:id"} element={<Item></Item>}></Route>
         <Route path="/CreateItems" element={<CreateItem />}></Route>
-        {errRoute}
+        <Route path="*" element={<ErrorPage type="mainErr" />} />
       </Routes>
     </div>
   );

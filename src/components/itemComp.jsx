@@ -5,6 +5,7 @@ import "../style/itemComp.css";
 
 // router
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 // comp
 import ItemSize from "./smallComp/ItemCizeComp";
@@ -65,14 +66,15 @@ function Item(props) {
   const { currenUser } = useContext(UserContext);
 
   const navigate = useNavigate();
+  const { routeLink, id } = useParams();
 
   // info set
   useEffect(() => {
     async function findItem() {
-      const itemRef = collection(db, props.clothingType);
+      const itemRef = collection(db, routeLink);
       const data = await getDocs(itemRef);
       const items = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-      const itemMain = items.find((item) => item.id === props.itemId);
+      const itemMain = items.find((item) => item.id === id);
 
       if (itemMain === undefined) {
         setFillterdArr(false);
@@ -94,7 +96,7 @@ function Item(props) {
 
   // img set
   useEffect(() => {
-    const imageRef = ref(storage, `${props.clothingType}/${props.itemId}`);
+    const imageRef = ref(storage, `${routeLink}/${id}`);
     listAll(imageRef).then((res) => {
       setState1(res.items.length);
       res.items.forEach((item) => {
@@ -154,7 +156,7 @@ function Item(props) {
   }
 
   async function upDate() {
-    const itemDoc = doc(db, props.clothingType, props.itemId);
+    const itemDoc = doc(db, routeLink, id);
 
     const newFields = {
       name: name,
@@ -326,7 +328,7 @@ function Item(props) {
                     <button
                       className="button-23"
                       onClick={() => {
-                        deleteItem(props.clothingType, props.itemId);
+                        deleteItem(routeLink, id);
                       }}
                     >
                       izbrisi

@@ -1,8 +1,7 @@
 import "../style/clothingTypePage.css";
 
 // react-dom
-import { useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 // fireStore
 import { db, storage } from "../sing-in/fireBase/fireBaseUtils";
@@ -18,12 +17,12 @@ import ErrorPage from "./errorNotfound/ErrPage";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 
-// storgae
+// storage
 import { getDownloadURL, listAll, ref } from "firebase/storage";
 
-function ClothingTyleFilter(props) {
+function ClothingTyleFilter() {
   const [itemId, setItemID] = useState();
-  
+
   const [item1, setItem1] = useState([]);
 
   const [arrSort, setArrSort] = useState([]);
@@ -31,11 +30,10 @@ function ClothingTyleFilter(props) {
   const [stateRun1, setStateRun1] = useState();
 
   // path
-  let location = useLocation();
-  const parts = location.pathname.split("/");
-  const lastUrlPart = parts.at(-1);
 
-  const itemCollection = collection(db, lastUrlPart);
+  const { routeLink } = useParams();
+
+  const itemCollection = collection(db, routeLink);
 
   useEffect(() => {
     const getItemID = async () => {
@@ -58,24 +56,29 @@ function ClothingTyleFilter(props) {
 
     itemId.forEach((element) => {
       const getitem = async () => {
-        const itemRef = doc(db, props.items, element);
+        const itemRef = doc(db, routeLink, element);
         const docSnap = await getDoc(itemRef);
 
-        const imageRef = ref(storage, `${props.items}/${element}`);
+        const imageRef = ref(storage, `${routeLink}/${element}`);
         const itemFromdb = docSnap.data();
 
         if (docSnap.exists()) {
           listAll(imageRef)
             .then((res) => {
-              function item() {
+              /*  function item() {
+
                 for (let num = 0; num < res.items.length; num++) {
                   if (res.items[num].fullPath.includes(":0:")) {
+                    console.log(res.items[num].fullPath);
                     return res.items[num];
                   }
                 }
+
+                //
               }
-              const item1 = item();
-              getDownloadURL(item1).then((url) => {
+              const item1 = item(); */
+
+              getDownloadURL(res.items[0]).then((url) => {
                 const { name, price, date } = itemFromdb;
                 setItem1((prev) => [
                   ...prev,
@@ -120,19 +123,14 @@ function ClothingTyleFilter(props) {
   return (
     <div>
       <div>
-        <h2 className="mainItemName">{props.items}</h2>
+        <h2 className="mainItemName">{routeLink}</h2>
         <div className="itemsContainer">
           <Container fluid>
             <Row sm={12} md={2} lg={3} xl={4}>
               {arrSort ? (
                 arrSort.map((obj) => (
                   <div className="boxItem" key={v4()}>
-                    <Link
-                      onClick={() => {
-                        props.functionGetRoute(obj.element, props.items);
-                      }}
-                      to={"/" + props.items + "/" + obj.element}
-                    >
+                    <Link to={"/" + routeLink + "/" + obj.element}>
                       <ClothingItem
                         name={obj.name}
                         price={obj.price}

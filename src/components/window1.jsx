@@ -6,9 +6,6 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 import ClothingType from "./smallComp/clothingType";
-import ClothingManu from "./smallComp/clothingManu";
-
-import clothType from "../images/shirt-line.png";
 
 function Window1(props) {
   return (
@@ -17,41 +14,15 @@ function Window1(props) {
         <Col>
           <div className="clothing-types">
             <Row>
-              <Col>
-                <ClothingType
-                  mainFun={props.fun1}
-                  icon={clothType}
-                  name="haljina"
-                />
-              </Col>
-              <Col>
-                <ClothingType
-                  mainFun={props.fun1}
-                  icon={clothType}
-                  name="pantalone"
-                />
-              </Col>
-              <Col>
-                <ClothingType
-                  mainFun={props.fun1}
-                  icon={clothType}
-                  name="suknja"
-                />
-              </Col>
-              <Col>
-                <ClothingType
-                  mainFun={props.fun1}
-                  icon={clothType}
-                  name="stikle"
-                />
-              </Col>
-              <Col>
-                <ClothingManu
-                  mainFun={props.fun1}
-                  icon={clothType}
-                  name="more..."
-                />
-              </Col>
+              {props.items.map((item) => {
+                return (
+                  <>
+                    <Col>
+                      <ClothingType name={item} />
+                    </Col>
+                  </>
+                );
+              })}
             </Row>
           </div>
         </Col>
