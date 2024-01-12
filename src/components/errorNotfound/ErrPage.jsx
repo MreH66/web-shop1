@@ -14,14 +14,14 @@ function ErrorPage(props) {
       case "ListOfItems":
         setComp1(
           <div className="nameOfItem">
-            <h2>Lista nije pronadjena</h2>
+            <h2>List not found</h2>
           </div>
         );
         break;
       case "ItemNotFound":
         setComp1(
           <div className="nameOfItem">
-            <h2>Artikl nije pronadjen</h2>
+            <h2>Item not found</h2>
           </div>
         );
         break;
@@ -35,10 +35,10 @@ function ErrorPage(props) {
       default:
         setComp1(
           <div className="nameOfItem">
-            <h2>Stranica nije pronadjena</h2>
+            <h2>Page not found</h2>
             <img src={imageArrow1} alt="" />
             <Link className="linkErrPage" to="/">
-              nazan na glavnu stranicu
+              go back to main page
             </Link>
             <img src={imageArrow2} alt="" />
           </div>

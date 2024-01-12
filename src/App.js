@@ -26,8 +26,8 @@ import malePic from "./images/article_aligned@2x.jpg";
 import femalePic from "./images/photoFemale.jpeg";
 import React, { useState } from "react";
 
-const ArrayOfClothing1 = ["haljina", "pantalone", "suknja", "stikle", "dodaci"];
-const ArrayOfClothing2 = ["jakna", "jakna", "jakna", "jakna", "jakna", "jakna"];
+const ArrayOfClothing1 = ["dress", "pants", "skirt", "heels", "more"];
+const ArrayOfClothing2 = ["jacket", "jacket", "jacket", "jacket", "jacket"];
 
 function App() {
   const [viewComp1] = useState(<Window1 items={ArrayOfClothing1} />);
@@ -91,7 +91,7 @@ function App() {
         ></Route>
         <Route
           exact
-          path={"/lista/:routeLink"}
+          path={"/list/:routeLink"}
           element={
             <div>
               <ClothingTyleFilter />

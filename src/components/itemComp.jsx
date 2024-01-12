@@ -147,7 +147,7 @@ function Item(props) {
           const itemRef = ref(storage, url);
           deleteObject(itemRef)
             .then(() => {
-              navigate("/lista/" + collection);
+              navigate("/list/" + collection);
             })
             .catch((err) => console.log(err));
         });
@@ -233,7 +233,7 @@ function Item(props) {
                 <div>
                   <FloatingLabel
                     controlId="floatingInput"
-                    label="Ime"
+                    label="Name"
                     className="mb-3"
                   >
                     <Form.Control
@@ -241,14 +241,14 @@ function Item(props) {
                       style={{ height: "50px" }}
                       className="floating111"
                       type="string"
-                      placeholder="ime"
+                      placeholder="Name"
                       onChange={(event) => {
                         setName(event.target.value);
                       }}
                     />
                   </FloatingLabel>
 
-                  <FloatingLabel controlId="Cena" label="Cena">
+                  <FloatingLabel controlId="price" label="price">
                     <Form.Control
                       value={price}
                       style={{ height: "50px" }}
@@ -257,7 +257,7 @@ function Item(props) {
                         setPrice(event.target.value);
                       }}
                       type="number"
-                      placeholder="cena"
+                      placeholder="price"
                     />
                   </FloatingLabel>
                 </div>
@@ -315,7 +315,7 @@ function Item(props) {
                 </div>
                 <div className="buttonDiv">
                   <button className="button-23" onClick={upDate}>
-                    Potvrdi
+                    Confirm
                   </button>
                 </div>
               </div>
@@ -331,7 +331,7 @@ function Item(props) {
                         deleteItem(routeLink, id);
                       }}
                     >
-                      izbrisi
+                      Delete
                     </button>
                     <button
                       className="button-23"
@@ -339,7 +339,7 @@ function Item(props) {
                         setListUpDate(!listUpDate);
                       }}
                     >
-                      azuriraj
+                      Update
                     </button>
                   </div>
                 </div>

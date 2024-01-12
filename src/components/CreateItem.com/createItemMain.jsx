@@ -50,7 +50,7 @@ function CreateItem() {
   const [sizeState4, setSizeState4] = useState(false);
 
   // collection name
-  const [collectionName, setCollectionName] = useState("suknja");
+  const [collectionName, setCollectionName] = useState("dress");
 
   //id
   const [randomId, setRandomId] = useState(null);
@@ -68,7 +68,6 @@ function CreateItem() {
 
   const [buttonImg, setButtonImg] = useState("Add image");
 
-  // setter if all images are uploaded
   const arrValues = [false, false, false, false, false, false];
 
   const navigate = useNavigate();
@@ -102,7 +101,7 @@ function CreateItem() {
 
   const createItem = async () => {
     if (name === "" || image1 === undefined || price === null) {
-      alert("jedno od polja je prazno");
+      alert("something is missing");
       return;
     }
 
@@ -284,32 +283,32 @@ function CreateItem() {
         <div className="dropD">
           <MDBDropdown>
             <MDBDropdownToggle tag="a" className="btn btn1122">
-              trenutna kolekcija ={collectionName}
+              current collection: {collectionName}
             </MDBDropdownToggle>
             <MDBDropdownMenu>
               <MDBDropdownItem
                 link
                 onClick={() => {
-                  setCollectionName("haljina");
+                  setCollectionName("dress");
                 }}
               >
-                haljina
+                dress
               </MDBDropdownItem>
               <MDBDropdownItem
                 link
                 onClick={() => {
-                  setCollectionName("pantalone");
+                  setCollectionName("pants");
                 }}
               >
-                pantalone
+                pants
               </MDBDropdownItem>
               <MDBDropdownItem
                 link
                 onClick={() => {
-                  setCollectionName("suknja");
+                  setCollectionName("skirt");
                 }}
               >
-                suknja
+                skirt
               </MDBDropdownItem>
             </MDBDropdownMenu>
           </MDBDropdown>
@@ -349,20 +348,20 @@ function CreateItem() {
                 <>
                   <FloatingLabel
                     controlId="floatingInput"
-                    label="Ime"
+                    label="Name"
                     className="mb-3"
                   >
                     <Form.Control
                       style={{ height: "50px" }}
                       className="floating111"
                       type="string"
-                      placeholder="ime"
+                      placeholder="Name"
                       onChange={(event) => {
                         setName(event.target.value);
                       }}
                     />
                   </FloatingLabel>
-                  <FloatingLabel controlId="Cena" label="Cena">
+                  <FloatingLabel controlId="Price" label="Price">
                     <Form.Control
                       style={{ height: "50px" }}
                       className="floating111"
@@ -370,13 +369,13 @@ function CreateItem() {
                         setPrice(event.target.value);
                       }}
                       type="number"
-                      placeholder="cena"
+                      placeholder="Price"
                     />
                   </FloatingLabel>
                 </>
 
                 <div className="textAr">
-                  <FloatingLabel controlId="floatingTextarea2" label="Komentar">
+                  <FloatingLabel controlId="floatingTextarea2" label="Comment">
                     <Form.Control
                       onChange={(event) => {
                         setTextInfo(event.target.value);

@@ -1,5 +1,6 @@
 // css
 import "../../style/clothingItemBox.css";
+import "../../style/animations/animations.css";
 
 function ClothingItem(props) {
   return (
@@ -9,7 +10,7 @@ function ClothingItem(props) {
       </div>
       <div className="clothingInfo">
         <p className="PInfoText">{props.name}</p>
-        <p className="PInfoText">{props.price} Din</p>
+        <p className="PInfoText">{props.price} $</p>
       </div>
     </div>
   );
