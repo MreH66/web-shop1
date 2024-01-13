@@ -19,6 +19,8 @@ const firebaseConfig = {
   appId: "1:799153726306:web:91ec4b731b5a23e856023b",
 };
 
+export const emailID = "eMOGiGlPfpb2NcTYXJb5r5aIDAx1"
+
 const app = initializeApp(firebaseConfig);
 
 const provider = new GoogleAuthProvider();

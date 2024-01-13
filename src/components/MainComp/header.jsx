@@ -8,6 +8,7 @@ import {
   singInWithGooglePopup,
   onAuthStateChangedListener,
   userSingOut,
+  emailID,
 } from "../../sing-in/fireBase/fireBaseUtils";
 
 import { UserContext } from "../Context/user.contest";
@@ -27,7 +28,7 @@ function Header() {
   }, [currenUser]);
 
   async function getAdminUser() {
-    const itemRef = doc(db, "AdminID", "eMOGiGlPfpb2NcTYXJb5r5aIDAx1");
+    const itemRef = doc(db, "AdminID", emailID);
     const AdminID = await getDoc(itemRef);
     // console.log(AdminID.id);
     return AdminID.id;
