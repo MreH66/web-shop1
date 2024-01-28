@@ -30,7 +30,6 @@ function ClothingTyleFilter() {
   const [stateRun1, setStateRun1] = useState();
 
   // path
-
   const { routeLink } = useParams();
 
   const itemCollection = collection(db, routeLink);
@@ -65,19 +64,6 @@ function ClothingTyleFilter() {
         if (docSnap.exists()) {
           listAll(imageRef)
             .then((res) => {
-              /*  function item() {
-
-                for (let num = 0; num < res.items.length; num++) {
-                  if (res.items[num].fullPath.includes(":0:")) {
-                    console.log(res.items[num].fullPath);
-                    return res.items[num];
-                  }
-                }
-
-                //
-              }
-              const item1 = item(); */
-
               getDownloadURL(res.items[0]).then((url) => {
                 const { name, price, date } = itemFromdb;
                 setItem1((prev) => [
@@ -122,29 +108,27 @@ function ClothingTyleFilter() {
 
   return (
     <div>
-      <div>
-        <h2 className="mainItemName">{routeLink}</h2>
-        <div className="itemsContainer">
-          <Container fluid>
-            <Row sm={12} md={2} lg={3} xl={4}>
-              {arrSort ? (
-                arrSort.map((obj) => (
-                  <div className="boxItem" key={v4()}>
-                    <Link to={"/" + routeLink + "/" + obj.element}>
-                      <ClothingItem
-                        name={obj.name}
-                        price={obj.price}
-                        MainPicture={obj.url}
-                      />
-                    </Link>
-                  </div>
-                ))
-              ) : (
-                <ErrorPage type="ListOfItems" />
-              )}
-            </Row>
-          </Container>
-        </div>
+      <h2 className="mainItemName">{routeLink}</h2>
+      <div className="itemsContainer">
+        <Container fluid>
+          <Row sm={12} md={2} lg={3} xl={4}>
+            {arrSort ? (
+              arrSort.map((obj) => (
+                <div className="boxItem" key={v4()}>
+                  <Link to={"/" + routeLink + "/" + obj.element}>
+                    <ClothingItem
+                      name={obj.name}
+                      price={obj.price}
+                      MainPicture={obj.url}
+                    />
+                  </Link>
+                </div>
+              ))
+            ) : (
+              <ErrorPage type="ListOfItems" />
+            )}
+          </Row>
+        </Container>
       </div>
     </div>
   );

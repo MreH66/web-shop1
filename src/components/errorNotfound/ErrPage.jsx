@@ -28,7 +28,7 @@ function ErrorPage(props) {
       case "Admin":
         setComp1(
           <div className="nameOfItem">
-            <h2>Admin nije pronadjen</h2>
+            <h2>Admin not found</h2>
           </div>
         );
         break;

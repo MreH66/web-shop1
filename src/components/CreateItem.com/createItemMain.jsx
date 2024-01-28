@@ -41,7 +41,9 @@ function CreateItem() {
   const [textInfo, setTextInfo] = useState("");
 
   // Context
-  const { currenUser } = useContext(UserContext);
+  const { currenUser, loadingDone } = useContext(UserContext);
+
+  console.log(loadingDone);
 
   // sizeState
   const [sizeState1, setSizeState1] = useState(false);
@@ -271,10 +273,14 @@ function CreateItem() {
     }
   }
 
-  if (currenUser === null) {
+  if (currenUser === null || currenUser === false) {
     return (
       <>
-        <ErrorPage type="Admin" />
+        {loadingDone ? null : (
+          <>
+            <ErrorPage type="Admin" />
+          </>
+        )}
       </>
     );
   } else if (comp === 2) {

@@ -9,7 +9,7 @@ import Col from "react-bootstrap/Col";
 function InfoText() {
   return (
     <div className="infoBox">
-      <h2 className="textInfo">Dodatno</h2>
+      <h2 className="textInfo">Additional information</h2>
       <div className="styleForBorder">
         <Container fluid>
           <Row>

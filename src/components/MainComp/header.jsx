@@ -15,24 +15,15 @@ import { UserContext } from "../Context/user.contest";
 
 import { getDoc, doc } from "firebase/firestore";
 
+async function getAdminUser() {
+  const itemRef = doc(db, "AdminID", emailID);
+  const AdminID = await getDoc(itemRef);
+  return AdminID.id;
+}
+
 function Header() {
-  const { currenUser, setCurrentUser } = useContext(UserContext);
-
-  useEffect(() => {
-    function chechIfUser() {
-      if (currenUser !== null) {
-        setCurrentUser(true);
-      }
-    }
-    chechIfUser();
-  }, [currenUser]);
-
-  async function getAdminUser() {
-    const itemRef = doc(db, "AdminID", emailID);
-    const AdminID = await getDoc(itemRef);
-    // console.log(AdminID.id);
-    return AdminID.id;
-  }
+  const { currenUser, setCurrentUser, setLoadingDone } =
+    useContext(UserContext);
 
   function isAdminLoggedIn() {
     if (currenUser === true) {
@@ -42,7 +33,7 @@ function Header() {
         </Link>
       );
     } else {
-      return <></>;
+      return null;
     }
   }
 
@@ -56,6 +47,7 @@ function Header() {
             setOptions(!options);
             setCurrentUser(true);
           } else {
+            setCurrentUser(false);
             alert("login only for admin");
           }
         });
@@ -72,12 +64,30 @@ function Header() {
     setOptions(!options);
   }
 
-  useEffect(() => {
-    const unsubcribe = onAuthStateChangedListener((user) => {
-      setCurrentUser(user);
-    });
+  function handleLogout() {
+    userSingOut();
+    setCurrentUser(false);
+    setLoadingDone(false);
+  }
 
-    return unsubcribe;
+  useEffect(() => {
+    console.log("start effect");
+
+    onAuthStateChangedListener((user) => {
+      if (user === null) {
+        return;
+      }
+
+      console.log("start");
+      getAdminUser().then((item) => {
+        if (item.toString() === user.uid.toString()) {
+          setCurrentUser(true);
+        } else {
+          setCurrentUser(false);
+        }
+      });
+      setLoadingDone(true);
+    });
   }, []);
 
   return (
@@ -93,22 +103,18 @@ function Header() {
         {currenUser ? (
           options ? (
             <>
-              <button onClick={userSingOut} className="optionsP">
+              <button onClick={handleLogout} className="optionsP">
                 <p className="LoginText">logout</p>
               </button>
             </>
-          ) : (
-            <></>
-          )
+          ) : null
         ) : options ? (
           <>
             <button onClick={logGoogleUser} className="optionsP">
               <p className="LoginText">Login</p>
             </button>
           </>
-        ) : (
-          <></>
-        )}
+        ) : null}
 
         <Link to="/">
           <h1 className="inlineD">Name</h1>
