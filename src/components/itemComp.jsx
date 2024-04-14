@@ -42,7 +42,7 @@ import { getDownloadURL, listAll, ref, deleteObject } from "firebase/storage";
 import { UserContext } from "./Context/user.contest";
 import { v4 } from "uuid";
 
-function Item(props) {
+function Item() {
   const [mainItem, setFillterdArr] = useState();
 
   const [imagelist, setImagelist] = useState([]);
@@ -53,11 +53,38 @@ function Item(props) {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [textInfo, setTextInfo] = useState("");
-  // sizeState
-  const [sizeState1, setSizeState1] = useState(false);
-  const [sizeState2, setSizeState2] = useState(false);
-  const [sizeState3, setSizeState3] = useState(false);
-  const [sizeState4, setSizeState4] = useState(false);
+
+  // size
+  const [sizeStates, setSizeStates] = useState([
+    { size: "S", available: false },
+    { size: "M", available: false },
+    { size: "L", available: false },
+    { size: "XL", available: false },
+  ]);
+
+  function handleSizeClick(size) {
+    const arrNew = [...sizeStates];
+
+    switch (size) {
+      case "S":
+        arrNew[0].available = !arrNew[0].available;
+        break;
+      case "M":
+        arrNew[1].available = !arrNew[1].available;
+        break;
+      case "L":
+        arrNew[2].available = !arrNew[2].available;
+        break;
+      case "XL":
+        arrNew[3].available = !arrNew[3].available;
+        break;
+
+      default:
+        console.log("size not found");
+    }
+
+    setSizeStates(arrNew);
+  }
 
   const [ArrImg, setArrImg] = useState([]);
   let [numberChange1, setNumberChnage1] = useState(0);
@@ -88,7 +115,6 @@ function Item(props) {
       setPrice(price);
       setTextInfo(info1);
 
-      //
       setFillterdArr(itemMain);
     }
     findItem();
@@ -161,10 +187,10 @@ function Item(props) {
     const newFields = {
       name: name,
       price: Number(price),
-      sizeS: sizeState1,
-      sizeM: sizeState2,
-      sizeL: sizeState3,
-      sizeXL: sizeState4,
+      sizeS: sizeStates[0].available,
+      sizeM: sizeStates[1].available,
+      sizeL: sizeStates[2].available,
+      sizeXL: sizeStates[3].available,
       info1: textInfo,
     };
 
@@ -280,37 +306,49 @@ function Item(props) {
                   <div
                     className="sizeClickDiv"
                     onClick={() => {
-                      setSizeState1(!sizeState1);
+                      handleSizeClick("S");
                     }}
                   >
-                    <ItemSize sizeValue={sizeState1} sizeName={"S"} />
+                    <ItemSize
+                      sizeValue={sizeStates[0].available}
+                      sizeName={"S"}
+                    />
                   </div>
 
                   <div
                     className="sizeClickDiv"
                     onClick={() => {
-                      setSizeState2(!sizeState2);
+                      handleSizeClick("M");
                     }}
                   >
-                    <ItemSize sizeValue={sizeState2} sizeName={"M"} />
+                    <ItemSize
+                      sizeValue={sizeStates[1].available}
+                      sizeName={"M"}
+                    />
                   </div>
 
                   <div
                     className="sizeClickDiv"
                     onClick={() => {
-                      setSizeState3(!sizeState3);
+                      handleSizeClick("L");
                     }}
                   >
-                    <ItemSize sizeValue={sizeState3} sizeName={"L"} />
+                    <ItemSize
+                      sizeValue={sizeStates[2].available}
+                      sizeName={"L"}
+                    />
                   </div>
 
                   <div
                     className="sizeClickDiv"
                     onClick={() => {
-                      setSizeState4(!sizeState4);
+                      handleSizeClick("XL");
                     }}
                   >
-                    <ItemSize sizeValue={sizeState4} sizeName={"XL"} />
+                    <ItemSize
+                      sizeValue={sizeStates[3].available}
+                      sizeName={"XL"}
+                    />
                   </div>
                 </div>
                 <div className="buttonDiv">

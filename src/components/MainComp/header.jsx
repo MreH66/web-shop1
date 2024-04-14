@@ -71,14 +71,11 @@ function Header() {
   }
 
   useEffect(() => {
-    console.log("start effect");
-
     onAuthStateChangedListener((user) => {
       if (user === null) {
         return;
       }
 
-      console.log("start");
       getAdminUser().then((item) => {
         if (item.toString() === user.uid.toString()) {
           setCurrentUser(true);

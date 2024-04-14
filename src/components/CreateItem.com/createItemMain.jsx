@@ -43,13 +43,41 @@ function CreateItem() {
   // Context
   const { currenUser, loadingDone } = useContext(UserContext);
 
-  console.log(loadingDone);
+  // size
+  const [sizeStates, setSizeStates] = useState([
+    { size: "S", available: false },
+    { size: "M", available: false },
+    { size: "L", available: false },
+    { size: "XL", available: false },
+  ]);
 
-  // sizeState
-  const [sizeState1, setSizeState1] = useState(false);
-  const [sizeState2, setSizeState2] = useState(false);
-  const [sizeState3, setSizeState3] = useState(false);
-  const [sizeState4, setSizeState4] = useState(false);
+  function handleSizeClick(size) {
+    const arrNew = [...sizeStates];
+
+    switch (size) {
+      case "S":
+        arrNew[0].available = !arrNew[0].available;
+        break;
+      case "M":
+        arrNew[1].available = !arrNew[1].available;
+        break;
+      case "L":
+        arrNew[2].available = !arrNew[2].available;
+        break;
+      case "XL":
+        arrNew[3].available = !arrNew[3].available;
+        break;
+
+      default:
+        console.log("size not found");
+    }
+
+    setSizeStates(arrNew);
+  }
+
+  function retImageRef(num) {
+    return ref(storage, `${collectionName}/${randomId}/:${num}:${v4()}`);
+  }
 
   // collection name
   const [collectionName, setCollectionName] = useState("dress");
@@ -70,33 +98,11 @@ function CreateItem() {
 
   const [buttonImg, setButtonImg] = useState("Add image");
 
-  const arrValues = [false, false, false, false, false, false];
-
   const navigate = useNavigate();
 
   useEffect(() => {
     setRandomId(v4().toString().replaceAll("-", ""));
   }, []);
-
-  function sizeState(size) {
-    switch (size) {
-      case 1:
-        setSizeState1(!sizeState1);
-        break;
-      case 2:
-        setSizeState2(!sizeState2);
-        break;
-      case 3:
-        setSizeState3(!sizeState3);
-        break;
-      case 4:
-        setSizeState4(!sizeState4);
-        break;
-
-      default:
-        console.log("size not found");
-    }
-  }
 
   // firebase
   const itemCollectionRef = collection(db, collectionName);
@@ -128,24 +134,19 @@ function CreateItem() {
     await setDoc(doc(itemCollectionRef, randomId), {
       name: name,
       price: Number(price),
-      sizeS: sizeState1,
-      sizeM: sizeState2,
-      sizeL: sizeState3,
-      sizeXL: sizeState4,
+      sizeS: sizeStates[0].available,
+      sizeM: sizeStates[1].available,
+      sizeL: sizeStates[2].available,
+      sizeXL: sizeStates[3].available,
       info1: textInfo,
       date: time1,
     }).then(() => randomId);
 
-    function upLoadAllPic() {
-      const imageRef = ref(storage, `${collectionName}/${randomId}/:0:${v4()}`);
-      const imageRe2 = ref(storage, `${collectionName}/${randomId}/:1:${v4()}`);
-      const imageRe3 = ref(storage, `${collectionName}/${randomId}/:2:${v4()}`);
-      const imageRe4 = ref(storage, `${collectionName}/${randomId}/:3:${v4()}`);
-      const imageRe5 = ref(storage, `${collectionName}/${randomId}/:4:${v4()}`);
-      const imageRe6 = ref(storage, `${collectionName}/${randomId}/:5:${v4()}`);
+    const arrValues = [false, false, false, false, false, false];
 
+    function upLoadAllPic() {
       if (image1 !== undefined) {
-        uploadBytes(imageRef, image1).then(() => {
+        uploadBytes(retImageRef(0), image1).then(() => {
           arrValues[0] = true;
           isEverythingDownloaded();
         });
@@ -154,7 +155,7 @@ function CreateItem() {
       }
 
       if (image2 !== undefined) {
-        uploadBytes(imageRe2, image2).then(() => {
+        uploadBytes(retImageRef(1), image2).then(() => {
           arrValues[1] = true;
           isEverythingDownloaded();
         });
@@ -163,7 +164,7 @@ function CreateItem() {
       }
 
       if (image3 !== undefined) {
-        uploadBytes(imageRe3, image3).then(() => {
+        uploadBytes(retImageRef(2), image3).then(() => {
           arrValues[2] = true;
           isEverythingDownloaded();
         });
@@ -172,7 +173,7 @@ function CreateItem() {
       }
 
       if (image4 !== undefined) {
-        uploadBytes(imageRe4, image4).then(() => {
+        uploadBytes(retImageRef(3), image4).then(() => {
           arrValues[3] = true;
           isEverythingDownloaded();
         });
@@ -181,7 +182,7 @@ function CreateItem() {
       }
 
       if (image5 !== undefined) {
-        uploadBytes(imageRe5, image5).then(() => {
+        uploadBytes(retImageRef(4), image5).then(() => {
           arrValues[4] = true;
           isEverythingDownloaded();
         });
@@ -190,7 +191,7 @@ function CreateItem() {
       }
 
       if (image6 !== undefined) {
-        uploadBytes(imageRe6, image6).then(() => {
+        uploadBytes(retImageRef(5), image6).then(() => {
           arrValues[5] = true;
           isEverythingDownloaded();
         });
@@ -397,37 +398,49 @@ function CreateItem() {
                   <div
                     className="sizeClickDiv"
                     onClick={() => {
-                      sizeState(1);
+                      handleSizeClick("S");
                     }}
                   >
-                    <ItemSize sizeValue={sizeState1} sizeName={"S"} />
+                    <ItemSize
+                      sizeValue={sizeStates[0].available}
+                      sizeName={"S"}
+                    />
                   </div>
 
                   <div
                     className="sizeClickDiv"
                     onClick={() => {
-                      sizeState(2);
+                      handleSizeClick("M");
                     }}
                   >
-                    <ItemSize sizeValue={sizeState2} sizeName={"M"} />
+                    <ItemSize
+                      sizeValue={sizeStates[1].available}
+                      sizeName={"M"}
+                    />
                   </div>
 
                   <div
                     className="sizeClickDiv"
                     onClick={() => {
-                      sizeState(3);
+                      handleSizeClick("L");
                     }}
                   >
-                    <ItemSize sizeValue={sizeState3} sizeName={"L"} />
+                    <ItemSize
+                      sizeValue={sizeStates[2].available}
+                      sizeName={"L"}
+                    />
                   </div>
 
                   <div
                     className="sizeClickDiv"
                     onClick={() => {
-                      sizeState(4);
+                      handleSizeClick("XL");
                     }}
                   >
-                    <ItemSize sizeValue={sizeState4} sizeName={"XL"} />
+                    <ItemSize
+                      sizeValue={sizeStates[3].available}
+                      sizeName={"XL"}
+                    />
                   </div>
                 </div>
               </div>

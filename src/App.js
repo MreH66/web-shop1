@@ -98,7 +98,7 @@ function App() {
             </div>
           }
         ></Route>
-        <Route path={"/:routeLink/:id"} element={<Item></Item>}></Route>
+        <Route path={"/:routeLink/:id"} element={<Item />}></Route>
         <Route path="/CreateItems" element={<CreateItem />}></Route>
         <Route path="*" element={<ErrorPage type="mainErr" />} />
       </Routes>
