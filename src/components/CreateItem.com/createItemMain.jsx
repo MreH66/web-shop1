@@ -1,6 +1,6 @@
 import "../../style/createItemCSS/createItem.css";
 
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import React from "react";
 
 // router
@@ -54,6 +54,7 @@ function CreateItem() {
   function handleSizeClick(size) {
     const arrNew = [...sizeStates];
 
+    // Workaround // loop?
     switch (size) {
       case "S":
         arrNew[0].available = !arrNew[0].available;
@@ -85,18 +86,38 @@ function CreateItem() {
   //id
   const [randomId, setRandomId] = useState(null);
 
-  //image
-  const [image1, setImage1] = useState(undefined);
-  const [image2, setImage2] = useState(undefined);
-  const [image3, setImage3] = useState(undefined);
-  const [image4, setImage4] = useState(undefined);
-  const [image5, setImage5] = useState(undefined);
-  const [image6, setImage6] = useState(undefined);
+  const [buttonImg, setButtonImg] = useState("Add image");
+
+  //images
+  const [imagesState, dispatch] = useReducer(reducer, []);
+
+  function reducer(state, action) {
+    switch (action.type) {
+      case "addImg":
+        let imagesSort = [...state, { pic: action.picMain, num: action.num }];
+
+        let itemsFound = [...state].find((obj) => obj.num === action.num);
+        if (itemsFound !== undefined) {
+          imagesSort.splice(itemsFound.num, 1);
+        }
+
+        let sortedImg = imagesSort.sort(function (a, b) {
+          return a.num - b.num;
+        });
+        setButtonImg("add image");
+        return sortedImg;
+
+      default:
+        return { errMsg: "action not found" };
+    }
+  }
+
+  useEffect(() => {
+    console.log(imagesState);
+  }, [imagesState]);
 
   //ConfiramtionScreen
   const [comp, setComp] = useState(2);
-
-  const [buttonImg, setButtonImg] = useState("Add image");
 
   const navigate = useNavigate();
 
@@ -108,7 +129,7 @@ function CreateItem() {
   const itemCollectionRef = collection(db, collectionName);
 
   const createItem = async () => {
-    if (name === "" || image1 === undefined || price === null) {
+    if (name === "" || imagesState.length === 0 || price === null) {
       alert("something is missing");
       return;
     }
@@ -142,74 +163,27 @@ function CreateItem() {
       date: time1,
     }).then(() => randomId);
 
-    const arrValues = [false, false, false, false, false, false];
-
-    function upLoadAllPic() {
-      if (image1 !== undefined) {
-        uploadBytes(retImageRef(0), image1).then(() => {
-          arrValues[0] = true;
+    function uploadAllPic() {
+      imagesState.forEach((item) => {
+        if (item.pic === undefined) {
+          return;
+        }
+        uploadBytes(retImageRef(item.num), item.pic).then(() => {
+          console.log("image downloaded");
           isEverythingDownloaded();
         });
-      } else {
-        arrValues[0] = true;
-      }
-
-      if (image2 !== undefined) {
-        uploadBytes(retImageRef(1), image2).then(() => {
-          arrValues[1] = true;
-          isEverythingDownloaded();
-        });
-      } else {
-        arrValues[1] = true;
-      }
-
-      if (image3 !== undefined) {
-        uploadBytes(retImageRef(2), image3).then(() => {
-          arrValues[2] = true;
-          isEverythingDownloaded();
-        });
-      } else {
-        arrValues[2] = true;
-      }
-
-      if (image4 !== undefined) {
-        uploadBytes(retImageRef(3), image4).then(() => {
-          arrValues[3] = true;
-          isEverythingDownloaded();
-        });
-      } else {
-        arrValues[3] = true;
-      }
-
-      if (image5 !== undefined) {
-        uploadBytes(retImageRef(4), image5).then(() => {
-          arrValues[4] = true;
-          isEverythingDownloaded();
-        });
-      } else {
-        arrValues[4] = true;
-      }
-
-      if (image6 !== undefined) {
-        uploadBytes(retImageRef(5), image6).then(() => {
-          arrValues[5] = true;
-          isEverythingDownloaded();
-        });
-      } else {
-        arrValues[5] = true;
-      }
+      });
+      console.log("uploading done");
+      isEverythingDownloaded();
 
       function isEverythingDownloaded() {
-        const allTrue = arrValues.every((element) => element === true);
-
-        if (allTrue) {
-          setTimeout(() => {
-            navigate("/" + collectionName + "/" + randomId);
-          }, "100");
-        }
+        // Workaround
+        setTimeout(() => {
+          navigate("/" + collectionName + "/" + randomId);
+        }, "5000");
       }
     }
-    upLoadAllPic();
+    uploadAllPic();
   };
 
   function uploadProggres() {
@@ -226,6 +200,20 @@ function CreateItem() {
   }, [numImg]);
 
   function AddPic() {
+    if (document.getElementById("butMain").files.length === 0) {
+      setButtonImg("fill empty inputs");
+      return;
+    }
+
+    for (let num = 1; num < numImg; num++) {
+      if (document.getElementById(num + "but")) {
+        if (document.getElementById(num + "but").files.length === 0) {
+          setButtonImg("fill empty inputs");
+          return;
+        }
+      }
+    }
+
     setNumImg(numImg + 1);
 
     if (numImg > 9) {
@@ -236,42 +224,19 @@ function CreateItem() {
       ...prev,
       <div>
         <input
-          id={numImg}
+          id={numImg + "but"}
           className="inputFile"
           type="file"
           onChange={(event) => {
-            setImg(event.target.files[0], event.currentTarget.id);
+            dispatch({
+              type: "addImg",
+              picMain: event.target.files[0],
+              num: Number(event.currentTarget.id.match(/\d+/g)),
+            });
           }}
         />
       </div>,
     ]);
-  }
-
-  function setImg(img, idFromButton) {
-    switch (Number(idFromButton)) {
-      case 1:
-        setImage2(img);
-        break;
-
-      case 2:
-        setImage3(img);
-        break;
-
-      case 3:
-        setImage4(img);
-        break;
-
-      case 4:
-        setImage5(img);
-        break;
-
-      case 5:
-        setImage6(img);
-        break;
-
-      default:
-        console.log("img not found");
-    }
   }
 
   if (currenUser === null || currenUser === false) {
@@ -328,10 +293,15 @@ function CreateItem() {
                 <li>
                   <div>
                     <input
+                      id={"butMain"}
                       className="inputFile"
                       type="file"
                       onChange={(event) => {
-                        setImage1(event.target.files[0]);
+                        dispatch({
+                          type: "addImg",
+                          picMain: event.target.files[0],
+                          num: 0,
+                        });
                       }}
                     />
                     <br />

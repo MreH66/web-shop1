@@ -10,7 +10,7 @@ function ClothingItem(props) {
       </div>
       <div className="clothingInfo">
         <p className="PInfoText">{props.name}</p>
-        <p className="PInfoText">{props.price} $</p>
+        <p className="PInfoText">{props.price} din</p>
       </div>
     </div>
   );
