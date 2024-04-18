@@ -112,11 +112,7 @@ function CreateItem() {
     }
   }
 
-  useEffect(() => {
-    console.log(imagesState);
-  }, [imagesState]);
-
-  //ConfiramtionScreen
+  //confirmation screen
   const [comp, setComp] = useState(2);
 
   const navigate = useNavigate();
