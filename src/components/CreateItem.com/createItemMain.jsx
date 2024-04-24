@@ -159,27 +159,33 @@ function CreateItem() {
       date: time1,
     }).then(() => randomId);
 
-    function uploadAllPic() {
+    function uploadPics() {
+      let chechIfuploaded = [];
+
       imagesState.forEach((item) => {
+        chechIfuploaded.push(false);
+
         if (item.pic === undefined) {
           return;
         }
         uploadBytes(retImageRef(item.num), item.pic).then(() => {
-          console.log("image downloaded");
-          isEverythingDownloaded();
+          console.log("image uploaded");
+
+          chechIfuploaded[item.num] = true;
+          isEverythingDownloaded(chechIfuploaded);
         });
       });
-      console.log("uploading done");
-      isEverythingDownloaded();
+    }
+    uploadPics();
 
-      function isEverythingDownloaded() {
-        // Workaround
+    function isEverythingDownloaded(arr) {
+      let allTrue = arr.every((val) => val === true);
+      if (allTrue) {
         setTimeout(() => {
           navigate("/" + collectionName + "/" + randomId);
-        }, "5000");
+        }, "100");
       }
     }
-    uploadAllPic();
   };
 
   function uploadProggres() {
