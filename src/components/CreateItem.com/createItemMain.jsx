@@ -160,32 +160,21 @@ function CreateItem() {
     }).then(() => randomId);
 
     function uploadPics() {
-      let chechIfuploaded = [];
+      let numChech = 0;
 
       imagesState.forEach((item) => {
-        chechIfuploaded.push(false);
-
         if (item.pic === undefined) {
           return;
         }
         uploadBytes(retImageRef(item.num), item.pic).then(() => {
-          console.log("image uploaded");
-
-          chechIfuploaded[item.num] = true;
-          isEverythingDownloaded(chechIfuploaded);
+          numChech++;
+          if (numChech === imagesState.length) {
+            navigate("/" + collectionName + "/" + randomId);
+          }
         });
       });
     }
     uploadPics();
-
-    function isEverythingDownloaded(arr) {
-      let allTrue = arr.every((val) => val === true);
-      if (allTrue) {
-        setTimeout(() => {
-          navigate("/" + collectionName + "/" + randomId);
-        }, "100");
-      }
-    }
   };
 
   function uploadProggres() {
